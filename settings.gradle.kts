@@ -1,2 +1,2 @@
-rootProject.name = "ggdsl"
+rootProject.name = "ggdsl-echarts"
 

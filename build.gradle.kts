@@ -1,17 +1,24 @@
 plugins {
     kotlin("jvm") version "1.6.0"
+    kotlin("plugin.serialization") version "1.6.0"
     `maven-publish`
 }
 
 group = "com.andreikingsley"
-version = "0.1.0"
+version = "0.1.1"
 
 repositories {
     mavenCentral()
+    maven {
+        url = uri("https://jitpack.io")
+    }
 }
 
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.1")
+
+    implementation("com.github.AndreiKingsley:ggdsl:0.1.1")
 }
 
 tasks {
@@ -27,8 +34,8 @@ publishing {
     publications {
         create<MavenPublication>("maven") {
             groupId = "com.andreikingsley"
-            artifactId = "ggdsl"
-            version = "0.1.0"
+            artifactId = "ggdsl-echarts"
+            version = "0.1.1"
 
             from(components["java"])
         }
