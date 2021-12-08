@@ -14,12 +14,21 @@ import kotlinx.serialization.json.Json
 internal class Integration : JupyterIntegration() {
 
     override fun Builder.onLoaded() {
+        resources {
+            js("echarts") {
+                url(ECHARTS_SRC)
+                classPath("js/echarts.min.js")
+            }
+        }
         render<Option> { HTML(it.toHTML()) }
+
+        // TODO imports
         // import("org.my.lib.*")
         // import("org.my.lib.io.*")
     }
 }
 
+const val ECHARTS_SRC = "https://cdn.jsdelivr.net/npm/echarts@5.2.2/dist/echarts.min.js"
 
 @ExperimentalSerializationApi
 fun Option.toJSON(): String {
@@ -30,17 +39,31 @@ fun Option.toJSON(): String {
 }
 
 fun Option.toHTML(): String {
-    return createHTML().div {
-        div {
-            id = "main" // TODO!!!
-            style = "width: 600;height:400;background: red"
+    return createHTML().html {
+        head {
+            meta {
+                charset = "utf-8"
+            }
+            title("MY BEAUTIFUL PLOT")
+            script {
+                type = "text/javascript"
+                src = ECHARTS_SRC
+            }
         }
-        script { src = "https://cdn.jsdelivr.net/npm/echarts@5.2.2/dist/echarts.min.js" }
-        script {
-            type = "text/javascript"
-            +("\n        var myChart = echarts.init(document.getElementById('main'));\n" +
-                    "        var option = ${toJSON().replace('\"', '\'')};\n" +
-                    "        myChart.setOption(option);")
+        body {
+            div {
+                id = "main" // TODO!!!
+                style = "width: 600;height:400;background: red"
+            }
+            script {
+                type = "text/javascript"
+                +("\n        var myChart = echarts.init(document.getElementById('main'));\n" +
+                        "        var option = ${toJSON().replace('\"', '\'')};\n" +
+                        "        myChart.setOption(option);")
+            }
         }
+
     }
+
+
 }
