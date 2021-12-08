@@ -20,7 +20,7 @@ internal class Integration : JupyterIntegration() {
                 classPath("js/echarts.min.js")
             }
         }
-        render<Option> { HTML(it.toHTML()) }
+        render<Option> { HTML(it.toHTML(), true) }
 
         // TODO imports
         // import("org.my.lib.*")

@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "com.andreikingsley"
-version = "0.1.1-jupyter-test-0.3-fix"
+version = "0.1.1-jupyter-test-0.4-fix"
 
 repositories {
     mavenCentral()
@@ -38,7 +38,7 @@ publishing {
         create<MavenPublication>("maven") {
             groupId = "com.andreikingsley"
             artifactId = "ggdsl-echarts"
-            version = "0.1.1-jupyter-test-0.3-fix"
+            version = "0.1.1-jupyter-test-0.4-fix"
 
             from(components["java"])
         }
