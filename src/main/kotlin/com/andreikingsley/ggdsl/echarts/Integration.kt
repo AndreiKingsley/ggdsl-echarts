@@ -39,7 +39,7 @@ fun Option.toHTML(): String {
         script {
             type = "text/javascript"
             +("\n        var myChart = echarts.init(document.getElementById('main'));\n" +
-                    "        var option = ${toJSON()};\n" +
+                    "        var option = ${toJSON().replace('\"', '\'')};\n" +
                     "        myChart.setOption(option);")
         }
     }
