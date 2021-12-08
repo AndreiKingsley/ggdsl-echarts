@@ -1,6 +1,7 @@
 plugins {
     kotlin("jvm") version "1.6.0"
     kotlin("plugin.serialization") version "1.6.0"
+    id("org.jetbrains.kotlin.jupyter.api") version "0.11.0-1"
     `maven-publish`
 }
 
@@ -20,6 +21,7 @@ dependencies {
 
     implementation("com.github.AndreiKingsley:ggdsl:0.1.1")
 }
+
 
 tasks {
     compileKotlin {
