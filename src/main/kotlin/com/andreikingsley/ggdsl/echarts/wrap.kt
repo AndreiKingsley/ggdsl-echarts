@@ -53,9 +53,11 @@ fun Scale.toVisualMap(aes: Aes, dim: Int): VisualMap {
             )
         }
         is ContinuousNonPositionalScale<*, *> -> {
-            val min = domainLimits?.first.toString()
-            val max = domainLimits?.second.toString()
-            val valuesString = listOf(range?.first.toString(), range?.second.toString())
+            val min = domainLimits?.first?.toString()
+            val max = domainLimits?.second?.toString()
+            val valuesString = range?.let {
+                listOf(it.first.toString(), it.second.toString())
+            }
             val inRange = when (aes.name) {
                 "color" -> InRange(color = valuesString)
                 "fill" -> InRange(color = valuesString)
@@ -74,7 +76,9 @@ fun Scale.toVisualMap(aes: Aes, dim: Int): VisualMap {
             TODO()
         }
     }
+
 }
+
 
 fun Scale.toAxis(): Axis {
     return when (this) {
