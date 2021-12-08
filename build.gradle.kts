@@ -17,6 +17,7 @@ repositories {
 
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
+    implementation("org.jetbrains.kotlinx:kotlinx-html-jvm:0.7.3")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.1")
 
     implementation("com.github.AndreiKingsley:ggdsl:0.1.1")
