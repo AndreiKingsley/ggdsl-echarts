@@ -11,7 +11,7 @@ import kotlinx.html.stream.createHTML
 internal class Integration : JupyterIntegration() {
 
     override fun Builder.onLoaded() {
-        render<Option> { it.xAxis.type }
+        render<Option> { HTML(it.toHTML()) }
         // import("org.my.lib.*")
         // import("org.my.lib.io.*")
     }
