@@ -53,7 +53,7 @@ fun Option.toHTML(): String {
         body {
             div {
                 id = "main" // TODO!!!
-                style = "width: 600px;height:400px;background: white"
+                style = "width: 1000px;height:800px;background: white"
             }
             script {
                 type = "text/javascript"

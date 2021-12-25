@@ -84,7 +84,7 @@ fun Scale.toVisualMap(aes: Aes, dim: Int, seriesIndex: Int, data: List<Any>): Vi
             val inRange = createInRange(aes, valuesString, categoriesString.size, isContinuous = false)
             VisualMap(
                 type = "piecewise",
-                show = false, // TODO
+                show = true, // TODO
                 dimension = dim,
                 categories = categoriesString,
                 inRange = inRange,
@@ -117,7 +117,7 @@ fun Scale.toVisualMap(aes: Aes, dim: Int, seriesIndex: Int, data: List<Any>): Vi
                     val categoriesString = data.toSet().map { it.toString() }
                     VisualMap(
                         type = "piecewise",
-                        show = false, // TODO
+                        show = true, // TODO
                         dimension = dim,
                         categories = data.toSet().map { it.toString() },
                         inRange = createInRange(aes, listOf(), categoriesString.size, false),
@@ -193,7 +193,7 @@ fun Layer.toSeries(): Series {
             y = mappings[Y]!!
         ),
         // TODO bars width
-        symbolSize = settings[SIZE]?.let { (it as Double).toInt() * 10 }, // TODO
+        symbolSize = settings[SIZE]?.let { (it as Double).toInt() * 4 }, // TODO
         itemStyle = ItemStyle(
             color = settings[COLOR]?.let { it as String },
             opacity = settings[ALPHA]?.let { it as Double },
