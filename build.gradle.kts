@@ -5,7 +5,7 @@ plugins {
     `maven-publish`
 }
 
-val ggdslVersion = "0.1.2-dev-1.8-animation-0.2"
+val ggdslVersion = "0.1.2-dev-1.8-animation-1.0"
 
 group = "com.andreikingsley"
 version = ggdslVersion
