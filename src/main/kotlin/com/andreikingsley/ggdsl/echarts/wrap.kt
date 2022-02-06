@@ -1,5 +1,7 @@
 package com.andreikingsley.ggdsl.echarts
 
+import com.andreikingsley.ggdsl.echarts.animation.AnimationFeature
+import com.andreikingsley.ggdsl.echarts.animation.DATA_CHANGE_ANIMATION_FEATURE
 import com.andreikingsley.ggdsl.ir.*
 import com.andreikingsley.ggdsl.ir.aes.*
 import com.andreikingsley.ggdsl.ir.scale.*
@@ -256,5 +258,13 @@ fun Plot.toOption(): Option {
         visualMap = visualMaps,
         series = layers.map { it.toSeries() },
         title = layout.title?.let { Title(it) }
-    )
+    ).apply {
+        (features[DATA_CHANGE_ANIMATION_FEATURE] as? AnimationFeature)?.let {
+            animation = true
+            animationThreshold = it.threshold
+            animationDuration = it.duration
+            animationEasing = it.easing.name
+            animationDelay = it.delay
+        }
+    }
 }

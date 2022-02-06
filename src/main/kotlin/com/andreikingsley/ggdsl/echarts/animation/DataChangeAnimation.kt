@@ -1,4 +1,4 @@
-package com.andreikingsley.ggdsl.echarts
+package com.andreikingsley.ggdsl.echarts.animation
 
 import com.andreikingsley.ggdsl.ir.NamedData
 import com.andreikingsley.ggdsl.ir.Plot
@@ -13,3 +13,4 @@ fun Plot.withDataChangeAnimation(
     interval: Int,
     dataChange: NamedData.() -> Unit
 ) = DataChangeAnimation(this, interval, dataChange)
+

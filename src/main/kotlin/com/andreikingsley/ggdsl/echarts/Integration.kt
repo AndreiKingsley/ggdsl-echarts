@@ -1,6 +1,6 @@
 package com.andreikingsley.ggdsl.echarts
 
-import com.andreikingsley.ggdsl.ir.NamedData
+import com.andreikingsley.ggdsl.echarts.animation.DataChangeAnimation
 import com.andreikingsley.ggdsl.ir.Plot
 import org.jetbrains.kotlinx.jupyter.api.annotations.JupyterLibrary
 import org.jetbrains.kotlinx.jupyter.api.*
@@ -11,7 +11,6 @@ import kotlinx.html.stream.createHTML
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import javax.naming.Name
 
 @JupyterLibrary
 internal class Integration : JupyterIntegration() {
@@ -90,7 +89,7 @@ fun DataChangeAnimation.toHTML(): String {
     val options = mutableListOf<Option>()
     repeat(maxStates) {
         dataChange(dataset)
-        val newPlot = Plot(dataset, plot.layers, plot.layout)
+        val newPlot = Plot(dataset, plot.layers, plot.layout, plot.features)
         options.add(newPlot.toOption())
     }
     val encodedOptions = encoder.encodeToString(options).replace('\"', '\'')

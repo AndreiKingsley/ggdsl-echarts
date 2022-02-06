@@ -10,6 +10,12 @@ data class Option(
     val visualMap: List<VisualMap>? = null,
     val series: List<Series>,
     val title: Title? = null,
+
+    var animation: Boolean = true, // TODO
+    var animationThreshold: Int = 2000,
+    var animationDuration: Int = 1000,
+    var animationEasing: String = "cubicOut",
+    var animationDelay: Int = 0,
 )
 
 @Serializable
