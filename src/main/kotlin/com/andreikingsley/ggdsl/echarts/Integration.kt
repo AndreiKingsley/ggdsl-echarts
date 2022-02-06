@@ -78,6 +78,7 @@ fun NamedData.copy(): NamedData {
 
  */
 
+@OptIn(ExperimentalSerializationApi::class)
 fun DataChangeAnimation.toHTML(): String {
     val encoder = Json {
         explicitNulls = false
@@ -86,13 +87,12 @@ fun DataChangeAnimation.toHTML(): String {
     val maxStates = 100
     val initOption = plot.toOption().toJSON().replace('\"', '\'')
     var dataset = plot.dataset!!
-    val options = mutableListOf<Option>()
+    val datasets = mutableListOf<Dataset>()
     repeat(maxStates) {
         dataChange(dataset)
-        val newPlot = Plot(dataset, plot.layers, plot.layout, plot.features)
-        options.add(newPlot.toOption())
+        datasets.add(Dataset(wrapData(dataset).first))
     }
-    val encodedOptions = encoder.encodeToString(options).replace('\"', '\'')
+    val encodedDatasets = encoder.encodeToString(datasets).replace('\"', '\'')
     return createHTML().html {
         head {
             meta {
@@ -115,13 +115,14 @@ fun DataChangeAnimation.toHTML(): String {
                         "\n        var myChart = echarts.init(document.getElementById('main'));\n" +
                                 "        var option = $initOption;\n" +
                                 "        myChart.setOption(option);\n" +
-                                "        var options = $encodedOptions;\n" +
+                                "        var datasets = $encodedDatasets;\n" +
                                 "var nextState = 0;\n" +
                                 "var maxStates = $maxStates\n" +
                                 "setInterval(function () {\n" +
-                                "var newOption = options[nextState];\n" +
+                                "var newDataset = datasets[nextState];\n" +
+                                "option.dataset = newDataset;\n"+
                                 "nextState = Math.min(1 + nextState, maxStates-1); \n" +
-                                "  myChart.setOption(newOption, true);\n" +
+                                "  myChart.setOption(option, true);\n" +
                                 "}, $interval);\n"
                         )
             }
