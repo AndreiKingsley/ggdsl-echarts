@@ -5,6 +5,7 @@ import com.andreikingsley.ggdsl.echarts.animation.DATA_CHANGE_ANIMATION_FEATURE
 import com.andreikingsley.ggdsl.ir.*
 import com.andreikingsley.ggdsl.ir.aes.*
 import com.andreikingsley.ggdsl.ir.scale.*
+import com.andreikingsley.ggdsl.ir.symbol.Symbol
 import kotlin.reflect.typeOf
 
 fun wrapData(data: NamedData): Pair<List<List<String>>, Map<String, Int>> {
@@ -202,7 +203,8 @@ fun Layer.toSeries(): Series {
             borderColor = settings[BORDER_COLOR]?.let { it as String },
             borderWidth = settings[BORDER_WIDTH]?.let { it as String },
         ),
-        // TODO symbol = settings[SYMBOL] as? String,
+        // TODO
+        symbol = (settings[SYMBOL] as? Symbol)?.name,
         barWidth = if (geom == Geom.BAR) {
             settings[WIDTH] as? Double
         } else {

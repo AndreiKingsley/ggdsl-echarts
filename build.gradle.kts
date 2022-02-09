@@ -5,7 +5,7 @@ plugins {
     `maven-publish`
 }
 
-val ggdslVersion = "0.1.2-dev-1.8-animation-1.1"
+val ggdslVersion = "0.1.2-dev-1.8-animation-1.3"
 
 group = "com.andreikingsley"
 version = ggdslVersion
@@ -22,7 +22,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-html-jvm:0.7.3")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.1")
 
-    implementation("com.github.AndreiKingsley:ggdsl:0.1.2-dev-1.8-feature-0.5")
+    implementation("com.github.AndreiKingsley:ggdsl:0.1.2-dev-1.8-feature-1.1")
 }
 
 

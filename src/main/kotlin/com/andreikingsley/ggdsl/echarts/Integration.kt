@@ -1,7 +1,7 @@
 package com.andreikingsley.ggdsl.echarts
 
 import com.andreikingsley.ggdsl.echarts.animation.DataChangeAnimation
-import com.andreikingsley.ggdsl.ir.Plot
+import com.andreikingsley.ggdsl.echarts.animation.PlotChangeAnimation
 import org.jetbrains.kotlinx.jupyter.api.annotations.JupyterLibrary
 import org.jetbrains.kotlinx.jupyter.api.*
 import org.jetbrains.kotlinx.jupyter.api.libraries.*
@@ -24,6 +24,7 @@ internal class Integration : JupyterIntegration() {
         }
         render<Option> { HTML(it.toHTML(), true) }
         render<DataChangeAnimation> { HTML(it.toHTML(), true) }
+        render<PlotChangeAnimation> { HTML(it.toHTML(), true) }
 
         // TODO imports
         // import("org.my.lib.*")
@@ -122,6 +123,52 @@ fun DataChangeAnimation.toHTML(): String {
                                 "var newDataset = datasets[nextState];\n" +
                                 "option.dataset = newDataset;\n"+
                                 "nextState = Math.min(1 + nextState, maxStates-1); \n" +
+                                "  myChart.setOption(option, true);\n" +
+                                "}, $interval);\n"
+                        )
+            }
+        }
+
+    }
+}
+
+@OptIn(ExperimentalSerializationApi::class)
+fun PlotChangeAnimation.toHTML(): String {
+    val encoder = Json {
+        explicitNulls = false
+        encodeDefaults = true
+    }
+
+    val encodedPlots = encoder.encodeToString(plots.map { it.toOption()}).replace('\"', '\'')
+    val size = plots.size
+    return createHTML().html {
+        head {
+            meta {
+                charset = "utf-8"
+            }
+            title("MY BEAUTIFUL PLOT")
+            script {
+                type = "text/javascript"
+                src = ECHARTS_SRC
+            }
+        }
+        body {
+            div {
+                id = "main" // TODO!!!
+                style = "width: 1000px;height:800px;background: white"
+            }
+            script {
+                type = "text/javascript"
+                +(
+                        "\n        var myChart = echarts.init(document.getElementById('main'));\n" +
+                                "        var options = $encodedPlots;\n" +
+                                "        var option = options[0];\n" +
+                                "        myChart.setOption(option);\n" +
+                                "var maxStates = $size\n" +
+                                "var nextState = 1 % maxStates;\n" +
+                                "setInterval(function () {\n" +
+                                "option = options[nextState];\n" +
+                                "nextState =(nextState + 1)%maxStates; \n" +
                                 "  myChart.setOption(option, true);\n" +
                                 "}, $interval);\n"
                         )

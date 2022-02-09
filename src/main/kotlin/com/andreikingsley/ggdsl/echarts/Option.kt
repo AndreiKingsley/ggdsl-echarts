@@ -56,7 +56,9 @@ data class Series(
     val itemStyle: ItemStyle? = null,
     val symbolSize: Int? = null,
     val symbol: String? = null,
-    val lineStyle: LineStyle? = null
+    val lineStyle: LineStyle? = null,
+    // TODO
+    val universalTransition: Boolean = true
 )
 
 @Serializable

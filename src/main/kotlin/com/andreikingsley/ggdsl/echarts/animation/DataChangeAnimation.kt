@@ -9,6 +9,14 @@ data class DataChangeAnimation(
     val dataChange: NamedData.() -> Unit
 )
 
+/*
+data class PlotChangeAnimation(
+    val plot: Plot,
+    val interval: Int,
+    val plotChange: Plot.() -> Unit
+)
+ */
+
 fun Plot.withDataChangeAnimation(
     interval: Int,
     dataChange: NamedData.() -> Unit
