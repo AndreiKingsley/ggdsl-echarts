@@ -121,7 +121,7 @@ fun DataChangeAnimation.toHTML(): String {
                                 "var maxStates = $maxStates\n" +
                                 "setInterval(function () {\n" +
                                 "var newDataset = datasets[nextState];\n" +
-                                "option.dataset = newDataset;\n"+
+                                "option.dataset = newDataset;\n" +
                                 "nextState = Math.min(1 + nextState, maxStates-1); \n" +
                                 "  myChart.setOption(option, true);\n" +
                                 "}, $interval);\n"
@@ -139,7 +139,7 @@ fun PlotChangeAnimation.toHTML(): String {
         encodeDefaults = true
     }
 
-    val encodedPlots = encoder.encodeToString(plots.map { it.toOption()}).replace('\"', '\'')
+    val encodedPlots = encoder.encodeToString(plots.map { it.toOption() }).replace('\"', '\'')
     val size = plots.size
     return createHTML().html {
         head {
@@ -159,18 +159,19 @@ fun PlotChangeAnimation.toHTML(): String {
             }
             script {
                 type = "text/javascript"
-                +(
-                        "\n        var myChart = echarts.init(document.getElementById('main'));\n" +
-                                "        var options = $encodedPlots;\n" +
-                                "        var option = options[0];\n" +
-                                "        myChart.setOption(option);\n" +
-                                "var maxStates = $size\n" +
-                                "var nextState = 1 % maxStates;\n" +
-                                "setInterval(function () {\n" +
-                                "option = options[nextState];\n" +
-                                "nextState =(nextState + 1)%maxStates; \n" +
-                                "  myChart.setOption(option, true);\n" +
-                                "}, $interval);\n"
+                +("""
+                        var myChart = echarts.init(document.getElementById('main'));
+                        var options = $encodedPlots;
+                        var option = options[0];
+                        myChart.setOption(option);
+                        var maxStates = $size;
+                        var nextState = 1 % maxStates;
+                        setInterval(function () {
+                            option = options[nextState];
+                            nextState = (nextState + 1) % maxStates;
+                            myChart.setOption(option, true);
+                        }, $interval);
+                        """.trimIndent()
                         )
             }
         }
