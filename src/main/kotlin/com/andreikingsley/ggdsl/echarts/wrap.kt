@@ -5,8 +5,8 @@ import com.andreikingsley.ggdsl.echarts.animation.DATA_CHANGE_ANIMATION_FEATURE
 import com.andreikingsley.ggdsl.ir.*
 import com.andreikingsley.ggdsl.ir.aes.*
 import com.andreikingsley.ggdsl.ir.scale.*
-import com.andreikingsley.ggdsl.ir.symbol.Symbol
-import com.andreikingsley.ggdsl.util.StandardColor
+import com.andreikingsley.ggdsl.util.color.*
+import com.andreikingsley.ggdsl.util.symbol.*
 import kotlin.reflect.typeOf
 
 fun wrapData(data: NamedData): Pair<List<List<String>>, Map<String, Int>> {
