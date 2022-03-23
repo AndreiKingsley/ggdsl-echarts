@@ -6,7 +6,7 @@ plugins {
 }
 
 val ggdslVersion = "0.1.2-dev-1.9-fix-0.3"
-val ggdslEChartsVersion = "0.1.2-dev-1.8-animation-1.3"
+val ggdslEChartsVersion = "0.1.2-dev-1.9-fix-0.3"
 
 group = "com.andreikingsley"
 version = ggdslEChartsVersion
