@@ -1,6 +1,6 @@
 package com.andreikingsley.ggdsl.echarts
 
-import com.andreikingsley.ggdsl.ir.symbol.Symbol
+import com.andreikingsley.ggdsl.util.symbol.Symbol
 
 class EchartsSymbol(override val name: String): Symbol {
     companion object {
