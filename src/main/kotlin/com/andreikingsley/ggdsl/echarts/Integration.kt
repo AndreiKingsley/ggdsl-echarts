@@ -26,9 +26,8 @@ internal class Integration : JupyterIntegration() {
         render<DataChangeAnimation> { HTML(it.toHTML(), true) }
         render<PlotChangeAnimation> { HTML(it.toHTML(), true) }
 
-        // TODO imports
-        // import("org.my.lib.*")
-        // import("org.my.lib.io.*")
+        import("com.andreikingsley.ggdsl.echarts.*")
+        import("com.andreikingsley.ggdsl.echarts.animation.*")
     }
 }
 
@@ -71,13 +70,6 @@ fun Option.toHTML(): String {
 
 
 }
-
-/*
-fun NamedData.copy(): NamedData {
-    return this.map { it.key to it.value.toList().toTypedArray() }.toMap()
-}
-
- */
 
 @OptIn(ExperimentalSerializationApi::class)
 fun DataChangeAnimation.toHTML(): String {

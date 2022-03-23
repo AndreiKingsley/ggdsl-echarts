@@ -6,6 +6,7 @@ import com.andreikingsley.ggdsl.ir.*
 import com.andreikingsley.ggdsl.ir.aes.*
 import com.andreikingsley.ggdsl.ir.scale.*
 import com.andreikingsley.ggdsl.ir.symbol.Symbol
+import com.andreikingsley.ggdsl.util.StandardColor
 import kotlin.reflect.typeOf
 
 fun wrapData(data: NamedData): Pair<List<List<String>>, Map<String, Int>> {
@@ -198,7 +199,7 @@ fun Layer.toSeries(): Series {
         // TODO bars width
         symbolSize = settings[SIZE]?.let { (it as Double).toInt() * 4 }, // TODO
         itemStyle = ItemStyle(
-            color = settings[COLOR]?.let { it as String },
+            color = settings[COLOR]?.let { (it as StandardColor).description },
             opacity = settings[ALPHA]?.let { it as Double },
             borderColor = settings[BORDER_COLOR]?.let { it as String },
             borderWidth = settings[BORDER_WIDTH]?.let { it as String },

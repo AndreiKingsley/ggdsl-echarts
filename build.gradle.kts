@@ -5,10 +5,11 @@ plugins {
     `maven-publish`
 }
 
-val ggdslVersion = "0.1.2-dev-1.8-animation-1.3"
+val ggdslVersion = "0.1.2-dev-1.9-fix-0.3"
+val ggdslEChartsVersion = "0.1.2-dev-1.8-animation-1.3"
 
 group = "com.andreikingsley"
-version = ggdslVersion
+version = ggdslEChartsVersion
 
 repositories {
     mavenCentral()
@@ -22,7 +23,8 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-html-jvm:0.7.3")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.1")
 
-    implementation("com.github.AndreiKingsley:ggdsl:0.1.2-dev-1.8-feature-1.1")
+    implementation("com.github.AndreiKingsley:ggdsl:$ggdslVersion")
+
 }
 
 
@@ -40,7 +42,7 @@ publishing {
         create<MavenPublication>("maven") {
             groupId = "com.andreikingsley"
             artifactId = "ggdsl-echarts"
-            version = ggdslVersion
+            version = ggdslEChartsVersion
 
             from(components["java"])
         }
