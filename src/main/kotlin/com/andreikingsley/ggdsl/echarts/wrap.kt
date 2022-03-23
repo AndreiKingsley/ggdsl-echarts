@@ -201,7 +201,7 @@ fun Layer.toSeries(): Series {
         itemStyle = ItemStyle(
             color = settings[COLOR]?.let { (it as StandardColor).description },
             opacity = settings[ALPHA]?.let { it as Double },
-            borderColor = settings[BORDER_COLOR]?.let { it as String },
+            borderColor = settings[BORDER_COLOR]?.let { (it as StandardColor).description },
             borderWidth = settings[BORDER_WIDTH]?.let { it as String },
         ),
         // TODO
