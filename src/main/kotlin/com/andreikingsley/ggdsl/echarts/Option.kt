@@ -77,14 +77,16 @@ data class ItemStyle(
 
 @Serializable
 data class LineStyle(
+    val color: String? = null,
     val width: Double? = null,
+    val type: String? = null,
 )
 
 @Serializable
 data class VisualMap(
     val type: String,
 
-    val show: Boolean = false,
+    val show: Boolean = true,
     val dimension: Int,
     val seriesIndex: Int,
 

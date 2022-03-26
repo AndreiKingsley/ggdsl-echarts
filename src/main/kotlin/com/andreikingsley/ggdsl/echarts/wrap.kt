@@ -6,6 +6,7 @@ import com.andreikingsley.ggdsl.ir.*
 import com.andreikingsley.ggdsl.ir.aes.*
 import com.andreikingsley.ggdsl.ir.scale.*
 import com.andreikingsley.ggdsl.util.color.*
+import com.andreikingsley.ggdsl.util.linetype.CommonLineType
 import com.andreikingsley.ggdsl.util.symbol.*
 import kotlin.reflect.typeOf
 
@@ -34,6 +35,7 @@ fun Geom.toType(): String {
     }
 }
 
+// todo!!!
 val colors = listOf("red", "blue", "green", "yellow", "purple")
 val sizes = listOf(20.0, 30.0, 40.0, 50.0, 60.0)
 val alphas = listOf(0.2, 0.3, 0.4, 0.5, 0.6)
@@ -133,6 +135,7 @@ fun Scale.toVisualMap(aes: Aes, dim: Int, seriesIndex: Int, data: List<Any>): Vi
                         type = "continuous",
                         show = false, // TODO
                         dimension = dim,
+                        // todo count
                         inRange = createInRange(aes, listOf(), -1, true),
                         seriesIndex = seriesIndex,
                     )
@@ -212,14 +215,18 @@ fun Layer.toSeries(): Series {
             null
         },
         lineStyle = if (geom == Geom.LINE) {
-            LineStyle(width = settings[WIDTH]?.let { it as Double })
+            LineStyle(
+                width = settings[WIDTH]?.let { it as Double },
+                color = settings[COLOR]?.let { (it as StandardColor).description },
+                type = settings[LINE_TYPE]?.let { (it as CommonLineType).description }
+            )
         } else {
             null
         }
     )
 }
 
-fun Plot.toOption(): Option {
+fun Plot.toOption(): MetaOption {
     val dataset = dataset!!.toMap()
     val (source, idToDim) = wrapData(dataset)
     // TODO!!!
@@ -230,7 +237,7 @@ fun Plot.toOption(): Option {
 
     //val xAxes = mutableListOf<Axis>()
     //val yAxes = mutableListOf<Axis>()
-    val series = mutableListOf<Series>()
+    //val series = mutableListOf<Series>()
 
     layers.forEachIndexed { index, layer ->
         layer.scales.forEach { (aes, scale) ->
@@ -254,20 +261,22 @@ fun Plot.toOption(): Option {
 
     }
 
-    return Option(
-        dataset = Dataset(source),
-        xAxis = listOf(xAxis),
-        yAxis = listOf(yAxis),
-        visualMap = visualMaps,
-        series = layers.map { it.toSeries() },
-        title = layout.title?.let { Title(it) }
-    ).apply {
-        (features[DATA_CHANGE_ANIMATION_FEATURE] as? AnimationFeature)?.let {
-            animation = true
-            animationThreshold = it.threshold
-            animationDuration = it.duration
-            animationEasing = it.easing.name
-            animationDelay = it.delay
-        }
-    }
+    return MetaOption(
+        Option(
+            dataset = Dataset(source),
+            xAxis = listOf(xAxis),
+            yAxis = listOf(yAxis),
+            visualMap = visualMaps,
+            series = layers.map { it.toSeries() },
+            title = layout.title?.let { Title(it) }
+        ).apply {
+            (features[DATA_CHANGE_ANIMATION_FEATURE] as? AnimationFeature)?.let {
+                animation = true
+                animationThreshold = it.threshold
+                animationDuration = it.duration
+                animationEasing = it.easing.name
+                animationDelay = it.delay
+            }
+        }, layout.size
+    )
 }

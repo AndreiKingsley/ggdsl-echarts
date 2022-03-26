@@ -5,8 +5,8 @@ plugins {
     `maven-publish`
 }
 
-val ggdslVersion = "0.2.1-dev-0.1"
-val ggdslEChartsVersion = "0.2.1-dev-0.1-fix-2"
+val ggdslVersion = "0.2.1-dev-0.2"
+val ggdslEChartsVersion = "0.2.1-dev-0.2"
 
 group = "com.andreikingsley"
 version = ggdslEChartsVersion
@@ -21,7 +21,7 @@ repositories {
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
     implementation("org.jetbrains.kotlinx:kotlinx-html-jvm:0.7.3")
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2")
 
     implementation("com.github.AndreiKingsley:ggdsl:$ggdslVersion")
 

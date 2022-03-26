@@ -22,7 +22,7 @@ internal class Integration : JupyterIntegration() {
                 classPath("js/echarts.min.js")
             }
         }
-        render<Option> { HTML(it.toHTML(), true) }
+        render<MetaOption> { HTML(it.option.toHTML(it.size), true) }
         render<DataChangeAnimation> { HTML(it.toHTML(), true) }
         render<PlotChangeAnimation> { HTML(it.toHTML(), true) }
 
@@ -41,7 +41,7 @@ fun Option.toJSON(): String {
     }.encodeToString(this)
 }
 
-fun Option.toHTML(): String {
+fun Option.toHTML(size: Pair<Int, Int>): String {
     return createHTML().html {
         head {
             meta {
@@ -55,8 +55,8 @@ fun Option.toHTML(): String {
         }
         body {
             div {
-                id = "main" // TODO!!!
-                style = "width: 1000px;height:800px;background: white"
+                id = "main"
+                style = "width: ${size.first}px;height:${size.second};background: white"
             }
             script {
                 type = "text/javascript"
@@ -71,6 +71,7 @@ fun Option.toHTML(): String {
 
 }
 
+// todo sizes
 @OptIn(ExperimentalSerializationApi::class)
 fun DataChangeAnimation.toHTML(): String {
     val encoder = Json {
@@ -78,7 +79,8 @@ fun DataChangeAnimation.toHTML(): String {
         encodeDefaults = true
     }
     val maxStates = 100
-    val initOption = plot.toOption().toJSON().replace('\"', '\'')
+    // todo size
+    val initOption = plot.toOption().option.toJSON().replace('\"', '\'')
     var dataset = plot.dataset!!
     val datasets = mutableListOf<Dataset>()
     repeat(maxStates) {
