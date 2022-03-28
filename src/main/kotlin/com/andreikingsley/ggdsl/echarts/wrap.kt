@@ -48,7 +48,7 @@ fun Geom.toType(): String {
 val colors = listOf("red", "blue", "green", "yellow", "purple")
 val sizes = listOf(20.0, 30.0, 40.0, 50.0, 60.0)
 val alphas = listOf(0.2, 0.3, 0.4, 0.5, 0.6)
-val symbols = listOf(TODO(), TODO(), TODO())
+// TODO val symbols = listOf(TODO(), TODO(), TODO())
 
 // TODO better
 fun createInRange(aes: Aes, valuesString: List<String>, size: Int, isContinuous: Boolean): InRange {
