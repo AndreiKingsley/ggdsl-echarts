@@ -60,9 +60,16 @@ fun Option.toHTML(size: Pair<Int, Int>): String {
             }
             script {
                 type = "text/javascript"
-                +("\n        var myChart = echarts.init(document.getElementById('main'));\n" +
+                +"""
+                    var myChart = echarts.init(document.getElementById('main'));
+                    var option = ${toJSON().replace('\"', '\'')};
+                    myChart.setOption(option);
+                """.trimIndent()
+                /*+("\n        var myChart = echarts.init(document.getElementById('main'));\n" +
                         "        var option = ${toJSON().replace('\"', '\'')};\n" +
                         "        myChart.setOption(option);")
+
+                 */
             }
         }
 
@@ -85,7 +92,7 @@ fun DataChangeAnimation.toHTML(): String {
     val datasets = mutableListOf<Dataset>()
     repeat(maxStates) {
         dataChange(dataset)
-        datasets.add(Dataset(wrapData(dataset).first))
+        datasets.add(Dataset(dataset.wrap().first))
     }
     val encodedDatasets = encoder.encodeToString(datasets).replace('\"', '\'')
     return createHTML().html {

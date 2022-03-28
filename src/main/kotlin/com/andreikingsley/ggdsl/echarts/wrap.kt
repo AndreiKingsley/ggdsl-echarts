@@ -10,18 +10,27 @@ import com.andreikingsley.ggdsl.util.linetype.CommonLineType
 import com.andreikingsley.ggdsl.util.symbol.*
 import kotlin.reflect.typeOf
 
-fun wrapData(data: NamedData): Pair<List<List<String>>, Map<String, Int>> {
-    val header = data.keys.toList()
-    val size = data.values.first().size
+internal fun NamedData.wrap(): Pair<List<List<String>>, Map<String, Int>> {
+    val header = keys.toList()
+    val values = values.toList()
+    val size = values.first().size
+
     val idToDim = header.mapIndexed { index, s -> s to index }.toMap()
 
-    val source = mutableListOf<List<String>>()
-    source.add(header)
+    val source = listOf(header) + (
+        (0 until size).map { rowIndex ->
+            header.indices.map { columnIndex -> values[columnIndex][rowIndex].toString() }
+        }
+    )
+    //source.add(header)
+    /*
     for (i in 0 until size) {
         source.add(
             header.map { data[it]!![i].toString() }
         )
     }
+
+     */
 
     return source to idToDim
 }
@@ -39,6 +48,7 @@ fun Geom.toType(): String {
 val colors = listOf("red", "blue", "green", "yellow", "purple")
 val sizes = listOf(20.0, 30.0, 40.0, 50.0, 60.0)
 val alphas = listOf(0.2, 0.3, 0.4, 0.5, 0.6)
+val symbols = listOf(TODO(), TODO(), TODO())
 
 // TODO better
 fun createInRange(aes: Aes, valuesString: List<String>, size: Int, isContinuous: Boolean): InRange {
@@ -199,7 +209,6 @@ fun Layer.toSeries(): Series {
             x = mappings[X]!!,
             y = mappings[Y]!!
         ),
-        // TODO bars width
         symbolSize = settings[SIZE]?.let { (it as Double).toInt() * 4 }, // TODO
         itemStyle = ItemStyle(
             color = settings[COLOR]?.let { (it as StandardColor).description },
@@ -228,7 +237,7 @@ fun Layer.toSeries(): Series {
 
 fun Plot.toOption(): MetaOption {
     val dataset = dataset!!.toMap()
-    val (source, idToDim) = wrapData(dataset)
+    val (source, idToDim) = dataset.wrap()
     // TODO!!!
 
     val visualMaps = mutableListOf<VisualMap>()
