@@ -236,7 +236,6 @@ fun Layer.toSeries(): Series {
 }
 
 fun Plot.toOption(): MetaOption {
-    val dataset = dataset.toMap()
     val (source, idToDim) = dataset.wrap()
     // TODO!!!
 
@@ -253,7 +252,7 @@ fun Plot.toOption(): MetaOption {
             // TODO X  and Y
             //val xAxisIndex = xAxes.size
             //val yAxisIndex = yAxes.size
-            val data = dataset[layer.mappings[aes]!!]!!.toList()
+            val data = dataset[layer.mappings[aes]!!]!!
             when (aes) {
                 X -> xAxis = scale.toAxis(data)
                 Y -> yAxis = scale.toAxis(data)
