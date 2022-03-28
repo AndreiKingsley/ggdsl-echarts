@@ -140,7 +140,7 @@ fun PlotChangeAnimation.toHTML(): String {
         encodeDefaults = true
     }
 
-    val encodedPlots = encoder.encodeToString(plots.map { it.toOption() }).replace('\"', '\'')
+    val encodedPlots = encoder.encodeToString(plots.map { it.toOption().option }).replace('\"', '\'')
     val size = plots.size
     return createHTML().html {
         head {
