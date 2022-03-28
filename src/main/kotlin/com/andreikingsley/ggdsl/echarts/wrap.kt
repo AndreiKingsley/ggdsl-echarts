@@ -236,7 +236,7 @@ fun Layer.toSeries(): Series {
 }
 
 fun Plot.toOption(): MetaOption {
-    val dataset = dataset!!.toMap()
+    val dataset = dataset.toMap()
     val (source, idToDim) = dataset.wrap()
     // TODO!!!
 
