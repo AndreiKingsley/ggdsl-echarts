@@ -22,6 +22,7 @@ internal class Integration : JupyterIntegration() {
                 classPath("js/echarts.min.js")
             }
         }
+        render<Option> { HTML(it.toHTML(800 to 600), true) }
         render<MetaOption> { HTML(it.option.toHTML(it.size), true) }
         render<DataChangeAnimation> { HTML(it.toHTML(), true) }
         render<PlotChangeAnimation> { HTML(it.toHTML(), true) }
