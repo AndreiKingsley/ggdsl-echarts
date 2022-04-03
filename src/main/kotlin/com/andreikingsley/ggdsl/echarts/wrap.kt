@@ -96,7 +96,15 @@ fun Scale.toVisualMap(aes: Aes, dim: Int, seriesIndex: Int, data: List<Any>): Vi
             } else {
                 data.toSet().map { it.toString() }
             }
-            val valuesString = values.map { value -> value.toString() }
+            // TODO wrapValue
+            val valuesString = values.map { value ->
+                when(value){
+                    is CommonLineType -> value.description
+                    is CommonSymbol -> value.name
+                    is StandardColor -> value.description
+                    else -> value.toString()
+                }
+            }
             val inRange = createInRange(aes, valuesString, categoriesString.size, isContinuous = false)
             VisualMap(
                 type = "piecewise",
