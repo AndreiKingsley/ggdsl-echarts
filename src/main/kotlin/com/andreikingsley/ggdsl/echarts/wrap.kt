@@ -89,6 +89,7 @@ fun createInRange(aes: Aes, valuesString: List<String>, size: Int, isContinuous:
 
 //todo
 fun wrapValue(value: Any): String{
+    println(value)
     return when(value){
         is CommonLineType -> value.description
         is CommonSymbol -> value.name
@@ -125,7 +126,7 @@ fun Scale.toVisualMap(aes: Aes, dim: Int, seriesIndex: Int, data: List<Any>): Vi
             val min = domainLimits?.first?.toString()
             val max = domainLimits?.second?.toString()
             val valuesString = range?.let {
-                listOf(wrapValue(it), wrapValue(it))
+                listOf(wrapValue(it.first), wrapValue(it.second))
             } ?: listOf()
             val inRange = createInRange(aes, valuesString, -1, isContinuous = true)
             VisualMap(
