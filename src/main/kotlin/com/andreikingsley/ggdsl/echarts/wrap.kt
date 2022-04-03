@@ -87,6 +87,17 @@ fun createInRange(aes: Aes, valuesString: List<String>, size: Int, isContinuous:
     }
 }
 
+//todo
+fun wrapValue(value: Any): String{
+    return when(value){
+        is CommonLineType -> value.description
+        is CommonSymbol -> value.name
+        is EchartsSymbol -> value.name
+        is StandardColor -> value.description
+        else -> value.toString()
+    }
+}
+
 // TODO!!! seriesIndex
 fun Scale.toVisualMap(aes: Aes, dim: Int, seriesIndex: Int, data: List<Any>): VisualMap {
     return when (this) {
@@ -98,12 +109,7 @@ fun Scale.toVisualMap(aes: Aes, dim: Int, seriesIndex: Int, data: List<Any>): Vi
             }
             // TODO wrapValue
             val valuesString = values.map { value ->
-                when(value){
-                    is CommonLineType -> value.description
-                    is CommonSymbol -> value.name
-                    is StandardColor -> value.description
-                    else -> value.toString()
-                }
+                wrapValue(value)
             }
             val inRange = createInRange(aes, valuesString, categoriesString.size, isContinuous = false)
             VisualMap(
@@ -119,7 +125,7 @@ fun Scale.toVisualMap(aes: Aes, dim: Int, seriesIndex: Int, data: List<Any>): Vi
             val min = domainLimits?.first?.toString()
             val max = domainLimits?.second?.toString()
             val valuesString = range?.let {
-                listOf(it.first.toString(), it.second.toString())
+                listOf(wrapValue(it), wrapValue(it))
             } ?: listOf()
             val inRange = createInRange(aes, valuesString, -1, isContinuous = true)
             VisualMap(
