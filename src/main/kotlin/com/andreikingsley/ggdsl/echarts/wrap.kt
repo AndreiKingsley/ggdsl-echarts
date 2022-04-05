@@ -108,6 +108,7 @@ fun wrapValue(value: Any): String{
     }
 }
 
+internal var visualMapCounter = 0
 // TODO!!! seriesIndex
 fun Scale.toVisualMap(aes: Aes, dim: Int, seriesIndex: Int, data: List<Any>): VisualMap {
     return when (this) {
@@ -124,11 +125,14 @@ fun Scale.toVisualMap(aes: Aes, dim: Int, seriesIndex: Int, data: List<Any>): Vi
             val inRange = createInRange(aes, valuesString, categoriesString.size, isContinuous = false)
             VisualMap(
                 type = "piecewise",
-                show = true, // TODO
+             //   show = true, // TODO
                 dimension = dim,
                 categories = categoriesString,
                 inRange = inRange,
                 seriesIndex = seriesIndex,
+
+                right = 10,
+                top = (visualMapCounter++) * 150
             )
         }
         is ContinuousNonPositionalScale<*, *> -> {
@@ -140,12 +144,15 @@ fun Scale.toVisualMap(aes: Aes, dim: Int, seriesIndex: Int, data: List<Any>): Vi
             val inRange = createInRange(aes, valuesString, -1, isContinuous = true)
             VisualMap(
                 type = "continuous",
-                show = false, // TODO
+              //  show = false, // TODO
                 dimension = dim,
                 min = min,
                 max = max,
                 inRange = inRange,
-                seriesIndex = seriesIndex
+                seriesIndex = seriesIndex,
+
+                right = 10,
+                top = (visualMapCounter++) * 150
             )
         }
 
@@ -153,25 +160,32 @@ fun Scale.toVisualMap(aes: Aes, dim: Int, seriesIndex: Int, data: List<Any>): Vi
             // todo date
 
             when (domainType) {
+                // todo
                 typeOf<String>() -> {
                     val categoriesString = data.toSet().map { it.toString() }
                     VisualMap(
                         type = "piecewise",
-                        show = true, // TODO
+                     //   show = true, // TODO
                         dimension = dim,
                         categories = data.toSet().map { it.toString() },
                         inRange = createInRange(aes, listOf(), categoriesString.size, false),
                         seriesIndex = seriesIndex,
+
+                        right = 10,
+                        top = (visualMapCounter++) * 150
                     )
                 }
                 else -> {
                     VisualMap(
                         type = "continuous",
-                        show = false, // TODO
+                      //  show = false, // TODO
                         dimension = dim,
                         // todo count
                         inRange = createInRange(aes, listOf(), -1, true),
                         seriesIndex = seriesIndex,
+
+                        right = 10,
+                        top = (visualMapCounter++) * 150
                     )
                 }
             }

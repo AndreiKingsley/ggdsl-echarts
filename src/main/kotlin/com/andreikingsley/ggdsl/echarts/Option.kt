@@ -57,7 +57,7 @@ data class Series(
     val symbolSize: Int? = null,
     val symbol: String? = null,
     val lineStyle: LineStyle? = null,
-    val stack: String? = null,
+    //val stack: String? = null,
     // TODO
     val universalTransition: Boolean = true
 )
@@ -96,7 +96,11 @@ data class VisualMap(
 
     val categories: List<String>? = null,
 
-    val inRange: InRange
+    val inRange: InRange,
+
+
+    val top: Int? = null,
+    val right: Int? = null,
 )
 
 @Serializable
