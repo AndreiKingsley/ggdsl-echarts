@@ -1,5 +1,6 @@
 package com.andreikingsley.ggdsl.echarts
 
+import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -91,8 +92,12 @@ data class VisualMap(
     val dimension: Int,
     val seriesIndex: Int,
 
-    val min: String? = null,
-    val max: String? = null,
+    // todo
+    @Contextual
+    val min: Double? = null,
+    // todo
+    @Contextual
+    val max: Double? = null,
 
     val categories: List<String>? = null,
 

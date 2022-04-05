@@ -136,8 +136,8 @@ fun Scale.toVisualMap(aes: Aes, dim: Int, seriesIndex: Int, data: List<Any>): Vi
             )
         }
         is ContinuousNonPositionalScale<*, *> -> {
-            val min = domainLimits?.first?.toString()
-            val max = domainLimits?.second?.toString()
+            val min = domainLimits?.first?.toString()?.toDouble()
+            val max = domainLimits?.second?.toString()?.toDouble()
             val valuesString = range?.let {
                 listOf(wrapValue(it.first), wrapValue(it.second))
             } ?: listOf()
@@ -278,6 +278,8 @@ fun Plot.toOption(): MetaOption {
     // TODO!!!
 
     val visualMaps = mutableListOf<VisualMap>()
+    visualMapCounter = 0
+
     var xAxis = Axis("value")
     var yAxis = Axis("value")
 
