@@ -89,10 +89,9 @@ fun createInRange(aes: Aes, valuesString: List<String>, size: Int, isContinuous:
 
 //todo
 fun wrapValue(value: Any): String{
-    println(value)
     return when(value){
         is CommonLineType -> value.description
-        is CommonSymbol -> value.name
+        is CommonSymbol -> value.description
         is EchartsSymbol -> value.name
         is StandardColor -> value.description
         else -> value.toString()
@@ -232,7 +231,7 @@ fun Layer.toSeries(): Series {
             borderWidth = settings[BORDER_WIDTH]?.let { it as String },
         ),
         // TODO
-        symbol = (settings[SYMBOL] as? Symbol)?.name,
+        symbol = (settings[SYMBOL] as? Symbol)?.let { wrapValue(it) },
         barWidth = if (geom == Geom.BAR) {
             settings[WIDTH] as? Double
         } else {

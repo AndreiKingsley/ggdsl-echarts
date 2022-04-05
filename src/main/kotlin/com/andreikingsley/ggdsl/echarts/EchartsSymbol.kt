@@ -2,9 +2,12 @@ package com.andreikingsley.ggdsl.echarts
 
 import com.andreikingsley.ggdsl.util.symbol.Symbol
 
-class EchartsSymbol(override val name: String): Symbol {
+class EchartsSymbol internal constructor(val name: String): Symbol {
     companion object {
         val DIAMOND = EchartsSymbol("diamond")
-        // TODO more
+        val ROUND_RECT = EchartsSymbol("roundRect")
+        val PIN = EchartsSymbol("pin")
+        val ARROW = EchartsSymbol("arrow")
+        val NONE = EchartsSymbol("none")
     }
 }

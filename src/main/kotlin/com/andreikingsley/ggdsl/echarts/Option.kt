@@ -57,6 +57,7 @@ data class Series(
     val symbolSize: Int? = null,
     val symbol: String? = null,
     val lineStyle: LineStyle? = null,
+    val stack: String? = null,
     // TODO
     val universalTransition: Boolean = true
 )
