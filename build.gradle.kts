@@ -6,7 +6,7 @@ plugins {
 }
 
 val ggdslVersion = "0.2.2-2"
-val ggdslEChartsVersion = "0.2.2-1"
+val ggdslEChartsVersion = "0.2.2-2"
 
 group = "com.andreikingsley"
 version = ggdslEChartsVersion

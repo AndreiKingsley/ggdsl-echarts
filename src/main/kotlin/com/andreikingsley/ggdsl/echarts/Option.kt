@@ -105,4 +105,5 @@ data class InRange(
     val symbolSize: List<Double>? = null,
     val color: List<String>? = null,
     val colorAlpha: List<Double>? = null,
+    val symbol: List<String>? = null,
 )
