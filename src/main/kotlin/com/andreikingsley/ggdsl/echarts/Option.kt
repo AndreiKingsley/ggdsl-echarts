@@ -1,5 +1,6 @@
 package com.andreikingsley.ggdsl.echarts
 
+import com.andreikingsley.ggdsl.echarts.util.color.EchartsColorOption
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 
@@ -41,6 +42,8 @@ data class Axis(
     val data: List<String>? = null,
 
     val axisTick: AxisTick? = AxisTick(),
+
+    val scale: Boolean = true,
 )
 
 @Serializable
@@ -71,7 +74,7 @@ data class XYEncode(
 
 @Serializable
 data class ItemStyle(
-    val color: String? = null,
+    val color: EchartsColorOption? = null,
     val opacity: Double? = null,
     val borderColor: String? = null,
     val borderWidth: String? = null,
@@ -79,7 +82,7 @@ data class ItemStyle(
 
 @Serializable
 data class LineStyle(
-    val color: String? = null,
+    val color: EchartsColorOption? = null,
     val width: Double? = null,
     val type: String? = null,
 )
@@ -112,7 +115,7 @@ data class VisualMap(
 data class InRange(
     // TODO
     val symbolSize: List<Double>? = null,
-    val color: List<String>? = null,
+    val color: List<String>? = null, // todo add gradient???
     val colorAlpha: List<Double>? = null,
     val symbol: List<String>? = null,
 )

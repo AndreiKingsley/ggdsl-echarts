@@ -2,6 +2,9 @@ package com.andreikingsley.ggdsl.echarts
 
 import com.andreikingsley.ggdsl.echarts.animation.AnimationFeature
 import com.andreikingsley.ggdsl.echarts.animation.DATA_CHANGE_ANIMATION_FEATURE
+import com.andreikingsley.ggdsl.echarts.util.color.*
+import com.andreikingsley.ggdsl.echarts.util.color.toEchartsColorOption
+import com.andreikingsley.ggdsl.echarts.util.symbol.EchartsSymbol
 import com.andreikingsley.ggdsl.ir.*
 import com.andreikingsley.ggdsl.ir.aes.*
 import com.andreikingsley.ggdsl.ir.scale.*
@@ -45,12 +48,10 @@ fun Geom.toType(): String {
 }
 
 // todo!!!
-val colors = listOf("red", "blue", "green", "yellow", "purple")
-val sizes = listOf(20.0, 30.0, 40.0, 50.0, 60.0)
-val alphas = listOf(0.2, 0.3, 0.4, 0.5, 0.6)
-//val symbols = listOf(Symbol.CIRCLE, Symbol.RECTANGLE, Symbol.TRIANGLE, EchartsSymbol.DIAMOND, EchartsSymbol.ARROW)
+val colors = listOf("red", "blue", "green", "yellow", "purple", "orange", "pink")
+val sizes = listOf(20.0, 28.0, 36.0, 44.0, 52.0, 60.0, 68.0)
+val alphas = listOf(0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5)
 val symbols = listOf("circle", "rect", "triangle", "diamond", "roundRect", "pin", "arrow")
-// TODO val symbols = listOf(TODO(), TODO(), TODO())
 
 // TODO better
 fun createInRange(aes: Aes, valuesString: List<String>, size: Int, isContinuous: Boolean): InRange {
@@ -249,7 +250,7 @@ fun Layer.toSeries(): Series {
         ),
         symbolSize = settings[SIZE]?.let { (it as Double).toInt() * 4 }, // TODO
         itemStyle = ItemStyle(
-            color = settings[COLOR]?.let { (it as StandardColor).description },
+            color = settings[COLOR]?.let { wrapColor(it as Color) },
             opacity = settings[ALPHA]?.let { it as Double },
             borderColor = settings[BORDER_COLOR]?.let { (it as StandardColor).description },
             borderWidth = settings[BORDER_WIDTH]?.let { it as String },
@@ -264,13 +265,23 @@ fun Layer.toSeries(): Series {
         lineStyle = if (geom == Geom.LINE) {
             LineStyle(
                 width = settings[WIDTH]?.let { it as Double },
-                color = settings[COLOR]?.let { (it as StandardColor).description },
+                color = settings[COLOR]?.let { wrapColor(it as Color ) },
                 type = settings[LINE_TYPE]?.let { (it as CommonLineType).description }
             )
         } else {
             null
         }
     )
+}
+
+// todo better serializer
+fun wrapColor(color: Color): EchartsColorOption {
+    return when(color){
+        is StandardColor -> SingleColor(color).toEchartsColorOption()
+        is LinearGradientColor -> color.toEchartsColorOption()
+        is RadialGradientColor -> color.toEchartsColorOption()
+        else -> TODO()
+    }
 }
 
 fun Plot.toOption(): MetaOption {

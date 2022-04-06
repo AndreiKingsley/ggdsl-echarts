@@ -1,4 +1,4 @@
-package com.andreikingsley.ggdsl.echarts
+package com.andreikingsley.ggdsl.echarts.util.symbol
 
 import com.andreikingsley.ggdsl.util.symbol.Symbol
 
