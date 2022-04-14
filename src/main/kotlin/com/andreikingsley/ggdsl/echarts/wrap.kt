@@ -203,6 +203,7 @@ fun Scale.toAxis(data: List<Any>): Axis {
     return when (this) {
         is CategoricalPositionalScale<*> -> {
             Axis(
+                // TODO SORT NUMERICAL
                 name = axis.name,
                 type = "category",
                 data = if (categories.isEmpty()) {

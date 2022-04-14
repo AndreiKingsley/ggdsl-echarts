@@ -57,7 +57,7 @@ fun Option.toHTML(size: Pair<Int, Int>): String {
         body {
             div {
                 id = "main"
-                style = "width: ${size.first}px;height:${size.second};background: white"
+                style = "width: ${size.first}px;height:${size.second}px;background: white"
             }
             script {
                 type = "text/javascript"
