@@ -3,6 +3,7 @@ package com.andreikingsley.ggdsl.echarts
 import com.andreikingsley.ggdsl.echarts.animation.AnimationFeature
 import com.andreikingsley.ggdsl.echarts.animation.DATA_CHANGE_ANIMATION_FEATURE
 import com.andreikingsley.ggdsl.echarts.scale.guide.EchartsAxis
+import com.andreikingsley.ggdsl.echarts.scale.guide.EchartsLegend
 import com.andreikingsley.ggdsl.echarts.util.color.*
 import com.andreikingsley.ggdsl.echarts.util.color.toEchartsColorOption
 import com.andreikingsley.ggdsl.echarts.util.symbol.EchartsSymbol
@@ -118,6 +119,11 @@ fun wrapValue(value: Any): String{
 internal var visualMapCounter = 0
 // TODO!!! seriesIndex
 fun Scale.toVisualMap(aes: Aes, dim: Int, seriesIndex: Int, data: List<Any>): VisualMap {
+    val legend = (this as NonPositionalScale<*, *>).legend as? EchartsLegend<*, *>
+    val name = legend?.name
+    val show = legend?.show
+    val calculable = legend?.calculable
+
     return when (this) {
         is CategoricalNonPositionalScale<*, *> -> {
             val categoriesString = if (categories.isNotEmpty()) {
@@ -131,8 +137,10 @@ fun Scale.toVisualMap(aes: Aes, dim: Int, seriesIndex: Int, data: List<Any>): Vi
             }
             val inRange = createInRange(aes, valuesString, categoriesString.size, isContinuous = false)
             VisualMap(
+                show = show,
+                text = name?.let { listOf(it) },
+                calculable = calculable,
                 type = "piecewise",
-             //   show = true, // TODO
                 dimension = dim,
                 categories = categoriesString,
                 inRange = inRange,

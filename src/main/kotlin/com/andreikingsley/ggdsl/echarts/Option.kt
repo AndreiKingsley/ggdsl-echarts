@@ -94,7 +94,9 @@ data class LineStyle(
 data class VisualMap(
     val type: String,
 
-    val show: Boolean = true,
+    val show: Boolean? = null,
+    val text: List<String>? = null,
+    val calculable: Boolean? = null,
     val dimension: Int,
     val seriesIndex: Int,
 
