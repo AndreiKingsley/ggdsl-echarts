@@ -13,14 +13,18 @@ import com.andreikingsley.ggdsl.ir.LayerFeature
         stack(stackAd)
     }
  */
-/*
-var BarsContext.stack: Boolean
-get() = true
+/**/
+
+// todo in others context
+var BarsContext.stack: Stack
+get() = Stack("TODO")
 set(value) {
-    features[STACK_FEATURE_NAME] = StackOption(value)
+    features[STACK_FEATURE_NAME] = value
 }
 
-class StackOption(val enabled: Boolean): LayerFeature
+//todo
+class Stack internal constructor(val name: String): LayerFeature
+
+fun stack(name: String) = Stack(name)
 
 
- */

@@ -65,7 +65,8 @@ data class Series(
     val lineStyle: LineStyle? = null,
     //val stack: String? = null,
     // TODO
-    val universalTransition: Boolean = true
+    val universalTransition: Boolean = true,
+    val stack: String? = null
 )
 
 @Serializable

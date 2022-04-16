@@ -4,6 +4,8 @@ import com.andreikingsley.ggdsl.echarts.animation.AnimationFeature
 import com.andreikingsley.ggdsl.echarts.animation.DATA_CHANGE_ANIMATION_FEATURE
 import com.andreikingsley.ggdsl.echarts.scale.guide.EchartsAxis
 import com.andreikingsley.ggdsl.echarts.scale.guide.EchartsLegend
+import com.andreikingsley.ggdsl.echarts.stack.STACK_FEATURE_NAME
+import com.andreikingsley.ggdsl.echarts.stack.Stack
 import com.andreikingsley.ggdsl.echarts.util.color.*
 import com.andreikingsley.ggdsl.echarts.util.color.toEchartsColorOption
 import com.andreikingsley.ggdsl.echarts.util.symbol.EchartsSymbol
@@ -158,6 +160,9 @@ fun Scale.toVisualMap(aes: Aes, dim: Int, seriesIndex: Int, data: List<Any>): Vi
             } ?: listOf()
             val inRange = createInRange(aes, valuesString, -1, isContinuous = true)
             VisualMap(
+                show = show,
+                text = name?.let { listOf(it) },
+                calculable = calculable,
                 type = "continuous",
               //  show = false, // TODO
                 dimension = dim,
@@ -179,6 +184,9 @@ fun Scale.toVisualMap(aes: Aes, dim: Int, seriesIndex: Int, data: List<Any>): Vi
                 typeOf<String>() -> {
                     val categoriesString = data.toSet().map { it.toString() }
                     VisualMap(
+                        show = show,
+                        text = name?.let { listOf(it) },
+                        calculable = calculable,
                         type = "piecewise",
                      //   show = true, // TODO
                         dimension = dim,
@@ -192,6 +200,9 @@ fun Scale.toVisualMap(aes: Aes, dim: Int, seriesIndex: Int, data: List<Any>): Vi
                 }
                 else -> {
                     VisualMap(
+                        show = show,
+                        text = name?.let { listOf(it) },
+                        calculable = calculable,
                         type = "continuous",
                       //  show = false, // TODO
                         dimension = dim,
@@ -280,6 +291,8 @@ fun Layer.toSeries(): Series {
     val width = settings.getNPSValue(WIDTH)
     val lineType = settings.getNPSValue(LINE_TYPE)
 
+    val stack = (features[STACK_FEATURE_NAME] as? Stack)?.name
+
     return Series(
         type = geom.toType(),
         encode = XYEncode(
@@ -308,7 +321,8 @@ fun Layer.toSeries(): Series {
             )
         } else {
             null
-        }
+        },
+        stack = stack
     )
 }
 
