@@ -1,6 +1,6 @@
 package com.andreikingsley.ggdsl.echarts.animation
 
-import com.andreikingsley.ggdsl.ir.NamedData
+import com.andreikingsley.ggdsl.ir.data.NamedData
 import com.andreikingsley.ggdsl.ir.Plot
 
 data class DataChangeAnimation(

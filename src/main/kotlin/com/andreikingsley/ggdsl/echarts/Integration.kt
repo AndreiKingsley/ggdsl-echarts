@@ -29,6 +29,10 @@ internal class Integration : JupyterIntegration() {
 
         import("com.andreikingsley.ggdsl.echarts.*")
         import("com.andreikingsley.ggdsl.echarts.animation.*")
+        import("com.andreikingsley.ggdsl.echarts.util.color.*")
+        import("com.andreikingsley.ggdsl.echarts.util.symbol.*")
+        import("com.andreikingsley.ggdsl.echarts.scale.guide.*")
+        //todo import layers
     }
 }
 

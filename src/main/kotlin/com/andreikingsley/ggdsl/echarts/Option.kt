@@ -34,6 +34,8 @@ data class Dataset(
 @Serializable
 data class Axis(
     val type: String,
+
+    val show: Boolean? = null,
     val name: String? = null,
 
     val min: String? = null,
@@ -76,8 +78,9 @@ data class XYEncode(
 data class ItemStyle(
     val color: EchartsColorOption? = null,
     val opacity: Double? = null,
-    val borderColor: String? = null,
-    val borderWidth: String? = null,
+    //val borderColor: String? = null,
+    val borderColor: EchartsColorOption? = null,
+    val borderWidth: Double? = null, // todo string?
 )
 
 @Serializable

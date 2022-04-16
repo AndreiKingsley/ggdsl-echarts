@@ -2,15 +2,21 @@ package com.andreikingsley.ggdsl.echarts
 
 import com.andreikingsley.ggdsl.echarts.animation.AnimationFeature
 import com.andreikingsley.ggdsl.echarts.animation.DATA_CHANGE_ANIMATION_FEATURE
+import com.andreikingsley.ggdsl.echarts.scale.guide.EchartsAxis
 import com.andreikingsley.ggdsl.echarts.util.color.*
 import com.andreikingsley.ggdsl.echarts.util.color.toEchartsColorOption
 import com.andreikingsley.ggdsl.echarts.util.symbol.EchartsSymbol
 import com.andreikingsley.ggdsl.ir.*
 import com.andreikingsley.ggdsl.ir.aes.*
+import com.andreikingsley.ggdsl.ir.bindings.NonPositionalSetting
+import com.andreikingsley.ggdsl.ir.bindings.ScalableMapping
+import com.andreikingsley.ggdsl.ir.bindings.Setting
+import com.andreikingsley.ggdsl.ir.data.NamedData
 import com.andreikingsley.ggdsl.ir.scale.*
 import com.andreikingsley.ggdsl.util.color.*
 import com.andreikingsley.ggdsl.util.linetype.CommonLineType
 import com.andreikingsley.ggdsl.util.symbol.*
+import kotlinx.html.LINK
 import kotlin.reflect.typeOf
 
 internal fun NamedData.wrap(): Pair<List<List<String>>, Map<String, Int>> {
@@ -200,11 +206,15 @@ fun Scale.toVisualMap(aes: Aes, dim: Int, seriesIndex: Int, data: List<Any>): Vi
 }
 
 fun Scale.toAxis(data: List<Any>): Axis {
+    val axis = (this as PositionalScale<*>).axis as? EchartsAxis<*>
+    val name = axis?.name
+    val show = axis?.show
     return when (this) {
         is CategoricalPositionalScale<*> -> {
             Axis(
-                // TODO SORT NUMERICAL
-                name = axis.name,
+                show = show,
+                // TODO SORT NUMERICAL???
+                name = name,
                 type = "category",
                 data = if (categories.isEmpty()) {
                     data.toSet().map { it.toString() }
@@ -215,21 +225,27 @@ fun Scale.toAxis(data: List<Any>): Axis {
         }
         is ContinuousPositionalScale<*> -> {
             Axis(
-                name = axis.name,
+                show = show,
+                name = name,
                 type = "value",
                 min = limits?.first?.toString(),
                 max = limits?.second?.toString(),
             )
         }
         is DefaultPositionalScale<*> -> when (domainType) {
+            // todo other types
             typeOf<String>() -> {
                 Axis(
+                    show = show,
+                    name = name,
                     type = "category",
                     data = data.toSet().map { it.toString() }
                 )
             }
             else -> {
                 Axis(
+                    show = show,
+                    name = name,
                     type = "value"
                 )
             }
@@ -240,34 +256,47 @@ fun Scale.toAxis(data: List<Any>): Axis {
     }
 }
 
+fun<T: Any> Map<Aes, Setting>.getNPSValue(key: NonPositionalAes<T>): T?{
+    return (this[key] as? NonPositionalSetting<*>)?.value as? T
+}
+
 fun Layer.toSeries(): Series {
     // TODO STYLE, type series
+
+    val size = settings.getNPSValue(SIZE)
+    val color = settings.getNPSValue(COLOR)
+    val alpha = settings.getNPSValue(ALPHA)
+    val borderColor = settings.getNPSValue(BORDER_COLOR)
+    val borderWidth = settings.getNPSValue(BORDER_WIDTH)
+    val symbol = settings.getNPSValue(SYMBOL)
+    val width = settings.getNPSValue(WIDTH)
+    val lineType = settings.getNPSValue(LINE_TYPE)
 
     return Series(
         type = geom.toType(),
         encode = XYEncode(
-            x = mappings[X]!!,
-            y = mappings[Y]!!
+            x = mappings[X]!!.source.id,
+            y = mappings[Y]!!.source.id
         ),
-        symbolSize = settings[SIZE]?.let { (it as Double).toInt() * 4 }, // TODO
+        symbolSize = size?.let { it.toInt() * 4 }, // TODO
         itemStyle = ItemStyle(
-            color = settings[COLOR]?.let { wrapColor(it as Color) },
-            opacity = settings[ALPHA]?.let { it as Double },
-            borderColor = settings[BORDER_COLOR]?.let { (it as StandardColor).description },
-            borderWidth = settings[BORDER_WIDTH]?.let { it as String },
+            color = color?.let { wrapColor(it) },
+            opacity = alpha,
+            borderColor = borderColor?.let { wrapColor(it) },
+            borderWidth = borderWidth,
         ),
         // TODO
-        symbol = (settings[SYMBOL] as? Symbol)?.let { wrapValue(it) },
+        symbol = symbol?.let { wrapValue(it) },
         barWidth = if (geom == Geom.BAR) {
-            settings[WIDTH] as? Double
+            width
         } else {
             null
         },
         lineStyle = if (geom == Geom.LINE) {
             LineStyle(
-                width = settings[WIDTH]?.let { it as Double },
-                color = settings[COLOR]?.let { wrapColor(it as Color ) },
-                type = settings[LINE_TYPE]?.let { (it as CommonLineType).description }
+                width = width,
+                color = color?.let { wrapColor(it) },
+                type = lineType?.let { (it as CommonLineType).description } // todo add wrapper
             )
         } else {
             null
@@ -300,23 +329,28 @@ fun Plot.toOption(): MetaOption {
     //val series = mutableListOf<Series>()
 
     layers.forEachIndexed { index, layer ->
-        layer.scales.forEach { (aes, scale) ->
+        layer.mappings.forEach { (aes, mapping) ->
+            if (mapping is ScalableMapping) {
+                val scale = mapping.scale
+                val srcId = layer.mappings[aes]!!.source.id
+                val data = dataset[srcId]!!
+                when (aes) {
+                    X -> xAxis = scale.toAxis(data)
+                    Y -> yAxis = scale.toAxis(data)
+                    else -> visualMaps.add(
+                        scale.toVisualMap(
+                            aes,
+                            idToDim[srcId]!!,
+                            index,
+                            data
+                        )
+                    ) // TODO
+                }
+            }
             // TODO X  and Y
             //val xAxisIndex = xAxes.size
             //val yAxisIndex = yAxes.size
-            val data = dataset[layer.mappings[aes]!!]!!
-            when (aes) {
-                X -> xAxis = scale.toAxis(data)
-                Y -> yAxis = scale.toAxis(data)
-                else -> visualMaps.add(
-                    scale.toVisualMap(
-                        aes,
-                        idToDim[layer.mappings[aes]!!]!!,
-                        index,
-                        data
-                    )
-                ) // TODO
-            }
+
         }
 
     }
