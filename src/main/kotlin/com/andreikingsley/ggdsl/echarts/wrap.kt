@@ -35,7 +35,7 @@ internal fun NamedData.wrap(): DataInfo {
 
     val source = listOf(header) + (
         (0 until size).map { rowIndex ->
-            header.indices.map { columnIndex -> values[columnIndex][rowIndex].toString() }
+            header.indices.map { columnIndex -> values.getOrNull(columnIndex)?.getOrNull(rowIndex).toString() }
         }
     )
     //source.add(header)
