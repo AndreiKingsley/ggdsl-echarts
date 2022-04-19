@@ -19,10 +19,14 @@ import com.andreikingsley.ggdsl.ir.scale.*
 import com.andreikingsley.ggdsl.util.color.*
 import com.andreikingsley.ggdsl.util.linetype.CommonLineType
 import com.andreikingsley.ggdsl.util.symbol.*
-import kotlinx.html.LINK
 import kotlin.reflect.typeOf
 
-internal fun NamedData.wrap(): Pair<List<List<String>>, Map<String, Int>> {
+data class DataInfo(
+    val data: List<List<String>>,
+    val header: Map<String, Int>
+)
+
+internal fun NamedData.wrap(): DataInfo {
     val header = keys.toList()
     val values = values.toList()
     val size = values.first().size
@@ -44,7 +48,7 @@ internal fun NamedData.wrap(): Pair<List<List<String>>, Map<String, Int>> {
 
      */
 
-    return source to idToDim
+    return DataInfo(source, idToDim)
 }
 
 fun Geom.toType(): String {
@@ -279,7 +283,8 @@ fun<T: Any> Map<Aes, Setting>.getNPSValue(key: NonPositionalAes<T>): T?{
     return (this[key] as? NonPositionalSetting<*>)?.value as? T
 }
 
-fun Layer.toSeries(): Series {
+fun Layer.toSeries(dataset: List<List<String>>?): Series {
+
     // TODO STYLE, type series
 
     val size = settings.getNPSValue(SIZE)
@@ -322,7 +327,8 @@ fun Layer.toSeries(): Series {
         } else {
             null
         },
-        stack = stack
+        stack = stack,
+        data = dataset
     )
 }
 
@@ -350,19 +356,28 @@ fun Plot.toOption(): MetaOption {
     //val yAxes = mutableListOf<Axis>()
     //val series = mutableListOf<Series>()
 
+    val layerToData = layers.mapIndexed { index, layer ->
+        index to if (layer.data === dataset) {
+            null
+        } else {
+            layer.data?.wrap()
+        }
+    }.toMap()
+
     layers.forEachIndexed { index, layer ->
         layer.mappings.forEach { (aes, mapping) ->
             if (mapping is ScalableMapping) {
                 val scale = mapping.scale
                 val srcId = layer.mappings[aes]!!.source.id
-                val data = dataset[srcId]!!
+                val data = layer.data?.get(srcId) ?: dataset[srcId]!!
+                val seriesIndex = layerToData[index]?.header?.get(srcId) ?: idToDim[srcId]!!
                 when (aes) {
                     X -> xAxis = scale.toAxis(data)
                     Y -> yAxis = scale.toAxis(data)
                     else -> visualMaps.add(
                         scale.toVisualMap(
                             aes,
-                            idToDim[srcId]!!,
+                            seriesIndex,
                             index,
                             data
                         )
@@ -372,7 +387,6 @@ fun Plot.toOption(): MetaOption {
             // TODO X  and Y
             //val xAxisIndex = xAxes.size
             //val yAxisIndex = yAxes.size
-
         }
 
     }
@@ -383,7 +397,7 @@ fun Plot.toOption(): MetaOption {
             xAxis = listOf(xAxis),
             yAxis = listOf(yAxis),
             visualMap = visualMaps,
-            series = layers.map { it.toSeries() },
+            series = layers.mapIndexed { index, layer -> layer.toSeries(layerToData[index]?.data) },
             title = layout.title?.let { Title(it) }
         ).apply {
             (features[DATA_CHANGE_ANIMATION_FEATURE] as? AnimationFeature)?.let {

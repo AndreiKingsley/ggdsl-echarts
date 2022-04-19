@@ -45,7 +45,8 @@ data class Axis(
 
     val axisTick: AxisTick? = AxisTick(),
 
-    val scale: Boolean = true,
+    // todo
+    val scale: Boolean = false,
 )
 
 @Serializable
@@ -66,7 +67,9 @@ data class Series(
     //val stack: String? = null,
     // TODO
     val universalTransition: Boolean = true,
-    val stack: String? = null
+    val stack: String? = null,
+
+    val data: List<List<String>>? = null,
 )
 
 @Serializable

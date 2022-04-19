@@ -7,7 +7,7 @@ import com.andreikingsley.ggdsl.ir.aes.*
 
 // todo echarts geom
 val AREA = Geom("area")
-
+/*
 class AreaContext : EchartsLayerContext() {
     val color = COLOR
     val alpha = ALPHA
@@ -19,3 +19,6 @@ class AreaContext : EchartsLayerContext() {
 fun PlotContext.area(block: AreaContext.() -> Unit) {
     layers.add(AreaContext().apply { copyFrom(this@area) }.apply(block).toLayer(AREA))
 }
+
+
+ */

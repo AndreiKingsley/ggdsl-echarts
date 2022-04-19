@@ -83,6 +83,7 @@ fun Option.toHTML(size: Pair<Int, Int>): String {
 
 }
 
+
 // todo sizes
 @OptIn(ExperimentalSerializationApi::class)
 fun DataChangeAnimation.toHTML(): String {
@@ -97,7 +98,7 @@ fun DataChangeAnimation.toHTML(): String {
     val datasets = mutableListOf<Dataset>()
     repeat(maxStates) {
         dataChange(dataset)
-        datasets.add(Dataset(dataset.wrap().first))
+        datasets.add(Dataset(dataset.wrap().data))
     }
     val encodedDatasets = encoder.encodeToString(datasets).replace('\"', '\'')
     return createHTML().html {
@@ -137,6 +138,8 @@ fun DataChangeAnimation.toHTML(): String {
 
     }
 }
+
+
 
 @OptIn(ExperimentalSerializationApi::class)
 fun PlotChangeAnimation.toHTML(): String {
