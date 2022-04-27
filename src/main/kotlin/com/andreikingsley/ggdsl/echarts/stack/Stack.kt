@@ -2,7 +2,8 @@ package com.andreikingsley.ggdsl.echarts.stack
 
 import com.andreikingsley.ggdsl.dsl.BarsContext
 import com.andreikingsley.ggdsl.dsl.LayerContext
-import com.andreikingsley.ggdsl.ir.LayerFeature
+import com.andreikingsley.ggdsl.ir.feature.FeatureName
+import com.andreikingsley.ggdsl.ir.feature.LayerFeature
 
 /*
     val stackAd = Stack("Ad")
@@ -23,7 +24,9 @@ set(value) {
 }
 
 //todo
-class Stack internal constructor(val name: String): LayerFeature
+class Stack internal constructor(val name: String): LayerFeature {
+    override val featureName: FeatureName = STACK_FEATURE_NAME
+}
 
 fun stack(name: String) = Stack(name)
 

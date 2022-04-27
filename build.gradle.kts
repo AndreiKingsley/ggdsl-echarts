@@ -5,8 +5,8 @@ plugins {
     `maven-publish`
 }
 
-val ggdslVersion = "0.4.1-1"
-val ggdslEChartsVersion = "0.4.1-2"
+val ggdslVersion = "0.6.1"
+val ggdslEChartsVersion = "0.6.1"
 
 group = "com.andreikingsley"
 version = ggdslEChartsVersion
@@ -25,6 +25,8 @@ dependencies {
 
     implementation("com.github.AndreiKingsley:ggdsl:$ggdslVersion")
 
+    //todo
+   // implementation("com.beust:klaxon:5.5")
 }
 
 

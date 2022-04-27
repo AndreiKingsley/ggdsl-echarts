@@ -2,6 +2,8 @@ package com.andreikingsley.ggdsl.echarts
 
 import com.andreikingsley.ggdsl.echarts.animation.DataChangeAnimation
 import com.andreikingsley.ggdsl.echarts.animation.PlotChangeAnimation
+import com.andreikingsley.ggdsl.echarts.translator.toOption
+import com.andreikingsley.ggdsl.echarts.translator.wrap
 import org.jetbrains.kotlinx.jupyter.api.annotations.JupyterLibrary
 import org.jetbrains.kotlinx.jupyter.api.*
 import org.jetbrains.kotlinx.jupyter.api.libraries.*
@@ -32,6 +34,7 @@ internal class Integration : JupyterIntegration() {
         import("com.andreikingsley.ggdsl.echarts.util.color.*")
         import("com.andreikingsley.ggdsl.echarts.util.symbol.*")
         import("com.andreikingsley.ggdsl.echarts.scale.guide.*")
+        import("com.andreikingsley.ggdsl.echarts.stack.*")
         //todo import layers
     }
 }
@@ -46,7 +49,7 @@ fun Option.toJSON(): String {
     }.encodeToString(this)
 }
 
-fun Option.toHTML(size: Pair<Int, Int>): String {
+fun Option.toHTML(size: Pair<Int, Int>?): String {
     return createHTML().html {
         head {
             meta {
@@ -61,7 +64,9 @@ fun Option.toHTML(size: Pair<Int, Int>): String {
         body {
             div {
                 id = "main"
-                style = "width: ${size.first}px;height:${size.second}px;background: white"
+                size?.let {
+                    style = "width: ${it.first}px;height:${it.second}px;background: white"
+                }
             }
             script {
                 type = "text/javascript"
@@ -83,7 +88,6 @@ fun Option.toHTML(size: Pair<Int, Int>): String {
 
 }
 
-
 // todo sizes
 @OptIn(ExperimentalSerializationApi::class)
 fun DataChangeAnimation.toHTML(): String {
@@ -98,7 +102,7 @@ fun DataChangeAnimation.toHTML(): String {
     val datasets = mutableListOf<Dataset>()
     repeat(maxStates) {
         dataChange(dataset)
-        datasets.add(Dataset(dataset.wrap().data))
+        datasets.add(Dataset(dataset.wrap().data.map { it.map { it.toString() } }))
     }
     val encodedDatasets = encoder.encodeToString(datasets).replace('\"', '\'')
     return createHTML().html {
@@ -138,8 +142,6 @@ fun DataChangeAnimation.toHTML(): String {
 
     }
 }
-
-
 
 @OptIn(ExperimentalSerializationApi::class)
 fun PlotChangeAnimation.toHTML(): String {

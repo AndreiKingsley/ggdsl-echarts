@@ -1,7 +1,6 @@
 package com.andreikingsley.ggdsl.echarts.animation
 
-import com.andreikingsley.ggdsl.ir.FeatureName
-import com.andreikingsley.ggdsl.ir.PlotFeature
+import com.andreikingsley.ggdsl.ir.feature.*
 
 class AnimationFeature(
     var enable: Boolean = true,
@@ -9,7 +8,9 @@ class AnimationFeature(
     var duration: Int = 1000,
     var easing: AnimationEasing = AnimationEasing.CUBIC_OUT,
     var delay: Int = 0
-): PlotFeature
+): PlotFeature {
+    override val featureName: FeatureName = DATA_CHANGE_ANIMATION_FEATURE
+}
 
 val DATA_CHANGE_ANIMATION_FEATURE = FeatureName("DATA_CHANGE_ANIMATION_FEATURE")
 
