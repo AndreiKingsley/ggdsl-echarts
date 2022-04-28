@@ -277,7 +277,7 @@ internal fun Scale.toAxis(data: List<Any>, domainType: KType? = null): Axis {
                 name = name,
 
                  */
-                type = "category",// todo move constant name
+                type = "value",// todo move constant name
                 min = limits?.first?.toString(),
                 max = limits?.second?.toString(),
             )
@@ -438,6 +438,8 @@ fun Plot.toOption(): MetaOption {
         }
 
     }
+
+    println(xAxis)
 
     return MetaOption(
         Option(
