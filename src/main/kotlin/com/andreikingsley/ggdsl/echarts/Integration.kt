@@ -44,10 +44,14 @@ const val ECHARTS_SRC = "https://cdn.jsdelivr.net/npm/echarts@5.2.2/dist/echarts
 
 @ExperimentalSerializationApi
 fun Option.toJSON(): String {
+    /*return Klaxon().toJsonString(this)*/
+
     return Json {
         explicitNulls = false
         encodeDefaults = true
     }.encodeToString(this)
+
+
 }
 
 fun Option.toHTML(size: Pair<Int, Int>?): String {
@@ -73,11 +77,14 @@ fun Option.toHTML(size: Pair<Int, Int>?): String {
             }
             script {
                 type = "text/javascript"
-                +"""
+                unsafe {
+                    +"""
                     var myChart = echarts.init(document.getElementById('main'));
-                    var option = ${toJSON().replace('\"', '\'')};
+                    var option = ${toJSON()/*.replace('\"', '\'')*/};
                     myChart.setOption(option);
                 """.trimIndent()
+                }
+
                 /*+("\n        var myChart = echarts.init(document.getElementById('main'));\n" +
                         "        var option = ${toJSON().replace('\"', '\'')};\n" +
                         "        myChart.setOption(option);")

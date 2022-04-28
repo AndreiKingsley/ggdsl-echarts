@@ -439,7 +439,7 @@ fun Plot.toOption(): MetaOption {
 
     }
 
-    println(xAxis)
+    println(yAxis)
 
     return MetaOption(
         Option(
