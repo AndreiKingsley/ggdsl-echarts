@@ -35,6 +35,7 @@ internal class Integration : JupyterIntegration() {
         import("com.andreikingsley.ggdsl.echarts.util.symbol.*")
         import("com.andreikingsley.ggdsl.echarts.scale.guide.*")
         import("com.andreikingsley.ggdsl.echarts.stack.*")
+        import("com.andreikingsley.ggdsl.echarts.translator.*")
         //todo import layers
     }
 }
