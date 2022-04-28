@@ -313,6 +313,7 @@ internal fun Scale.toAxis(data: List<Any>, domainType: KType? = null): Axis {
             }
         }
         else -> {
+            println(this)
             TODO()
         }
     }
