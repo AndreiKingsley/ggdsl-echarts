@@ -439,8 +439,6 @@ fun Plot.toOption(): MetaOption {
 
     }
 
-    println(yAxis)
-
     return MetaOption(
         Option(
             dataset = Dataset(source.map { it.map { it.toString() } }),
