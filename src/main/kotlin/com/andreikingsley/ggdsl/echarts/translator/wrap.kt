@@ -19,7 +19,7 @@ import com.andreikingsley.ggdsl.util.symbol.*
 import kotlin.reflect.KType
 import kotlin.reflect.typeOf
 
-data class DataInfo(
+internal data class DataInfo(
     val data: List<List<Any>>,
     val header: Map<String, Int>
 )
@@ -49,7 +49,7 @@ internal fun NamedData.wrap(): DataInfo {
     return DataInfo(source, idToDim)
 }
 
-fun Geom.toType(): String {
+internal fun Geom.toType(): String {
     return when (this) {
         Geom.POINT -> "scatter"
         Geom.BAR -> "bar"
@@ -59,13 +59,13 @@ fun Geom.toType(): String {
 }
 
 // todo!!!
-val colors = listOf("red", "blue", "green", "yellow", "purple", "orange", "pink")
-val sizes = listOf(20.0, 28.0, 36.0, 44.0, 52.0, 60.0, 68.0)
-val alphas = listOf(0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5)
-val symbols = listOf("circle", "rect", "triangle", "diamond", "roundRect", "pin", "arrow")
+internal val colors = listOf("red", "blue", "green", "yellow", "purple", "orange", "pink")
+internal val sizes = listOf(20.0, 28.0, 36.0, 44.0, 52.0, 60.0, 68.0)
+internal val alphas = listOf(0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5)
+internal val symbols = listOf("circle", "rect", "triangle", "diamond", "roundRect", "pin", "arrow")
 
 // TODO better
-fun createInRange(aes: Aes, valuesString: List<Any>?, size: Int, isContinuous: Boolean): InRange {
+internal fun createInRange(aes: Aes, valuesString: List<Any>?, size: Int, isContinuous: Boolean): InRange {
     return when (aes) {
         COLOR -> InRange(
             color = valuesString?.map { it as String}
@@ -106,7 +106,7 @@ fun createInRange(aes: Aes, valuesString: List<Any>?, size: Int, isContinuous: B
 }
 
 //todo
-fun wrapValue(value: Any): Any {
+internal fun wrapValue(value: Any): Any {
     return when (value) {
         is CommonLineType -> value.description
         is CommonSymbol -> value.description
@@ -118,7 +118,7 @@ fun wrapValue(value: Any): Any {
 
 internal var visualMapCounter = 0
 
-fun defaultPiecewiseVisualMap(aes: Aes, dim: Int, seriesIndex: Int, data: List<Any>,): VisualMap {
+internal fun defaultPiecewiseVisualMap(aes: Aes, dim: Int, seriesIndex: Int, data: List<Any>,): VisualMap {
     val categoriesString = data.toSet().map { it.toString() }
     return VisualMap(
         /*
@@ -139,7 +139,7 @@ fun defaultPiecewiseVisualMap(aes: Aes, dim: Int, seriesIndex: Int, data: List<A
     )
 }
 
-fun defaultContinuousVisualMap(aes: Aes, dim: Int, seriesIndex: Int, data: List<Any>,): VisualMap {
+internal fun defaultContinuousVisualMap(aes: Aes, dim: Int, seriesIndex: Int, data: List<Any>,): VisualMap {
     return VisualMap(
         /*
         show = show,
@@ -160,13 +160,12 @@ fun defaultContinuousVisualMap(aes: Aes, dim: Int, seriesIndex: Int, data: List<
 }
 
 // TODO!!! seriesIndex
-fun Scale.toVisualMap(
+internal fun Scale.toVisualMap(
     aes: Aes,
     dim: Int,
     seriesIndex: Int,
     data: List<Any>,
-    domainType: KType? = null,
-    rangeType: KType? = null
+    domainType: KType
 ): VisualMap {
     /*
     val legend = (this as NonPositionalScale<*, *>).legend as? EchartsLegend<*, *>
@@ -250,7 +249,8 @@ fun Scale.toVisualMap(
 
 }
 
-fun Scale.toAxis(data: List<Any>, domainType: KType? = null): Axis {
+internal fun Scale.toAxis(data: List<Any>, domainType: KType? = null): Axis {
+    // todo date
     /*
     val axis = (this as PositionalScale<*>).axis as? EchartsAxis<*>
     val name = axis?.name
@@ -319,11 +319,11 @@ fun Scale.toAxis(data: List<Any>, domainType: KType? = null): Axis {
 }
 
 
-fun <T : Any> Map<Aes, Setting>.getNPSValue(key: NonPositionalAes<T>): T? {
+internal fun <T : Any> Map<Aes, Setting>.getNPSValue(key: NonPositionalAes<T>): T? {
     return (this[key] as? NonPositionalSetting<*>)?.value as? T
 }
 
-fun Layer.toSeries(dataset: List<List<Any>>?): Series {
+internal fun Layer.toSeries(dataset: List<List<Any>>?): Series {
 
     // TODO STYLE, type series
 
@@ -380,7 +380,7 @@ internal fun Mapping.sourceId(): String {
 }
 
 // todo better serializer
-fun wrapColor(color: Color): EchartsColorOption {
+internal fun wrapColor(color: Color): EchartsColorOption {
     return when (color) {
         is StandardColor -> SingleColor(color).toEchartsColorOption()
         is LinearGradientColor -> color.toEchartsColorOption()
@@ -426,7 +426,8 @@ fun Plot.toOption(): MetaOption {
                             aes,
                             seriesIndex,
                             index,
-                            data
+                            data,
+                            mapping.domainType
                         )
                     ) // TODO
                 }
