@@ -5,8 +5,8 @@ plugins {
     `maven-publish`
 }
 
-val ggdslVersion = "0.6.3"
-val ggdslEChartsVersion = "0.6.3-1"
+val ggdslVersion = "0.6.4"
+val ggdslEChartsVersion = "0.6.4-1"
 
 group = "com.andreikingsley"
 version = ggdslEChartsVersion
