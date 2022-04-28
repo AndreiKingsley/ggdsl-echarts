@@ -131,7 +131,7 @@ fun defaultPiecewiseVisualMap(aes: Aes, dim: Int, seriesIndex: Int, data: List<A
         //   show = true, // TODO
         dimension = dim,
         categories = categoriesString,
-        inRange = createInRange(aes, listOf(), categoriesString.size, false),
+        inRange = createInRange(aes, null, categoriesString.size, false),
         seriesIndex = seriesIndex,
 
         right = 10,
@@ -151,7 +151,7 @@ fun defaultContinuousVisualMap(aes: Aes, dim: Int, seriesIndex: Int, data: List<
         //  show = false, // TODO
         dimension = dim,
         // todo count
-        inRange = createInRange(aes, listOf(), -1, true),
+        inRange = createInRange(aes, null, -1, true),
         seriesIndex = seriesIndex,
 
         right = 10,
