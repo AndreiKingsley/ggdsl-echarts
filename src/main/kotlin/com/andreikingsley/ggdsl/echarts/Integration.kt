@@ -51,6 +51,8 @@ fun Option.toJSON(): String {
 }
 
 fun Option.toHTML(size: Pair<Int, Int>?): String {
+    val height = size?.first ?: 600
+    val width = size?.second ?: 400
     return createHTML().html {
         head {
             meta {
@@ -66,7 +68,7 @@ fun Option.toHTML(size: Pair<Int, Int>?): String {
             div {
                 id = "main"
                 size?.let {
-                    style = "width: ${it.first}px;height:${it.second}px;background: white"
+                    style = "width: ${width}px;height:${height}px;background: white"
                 }
             }
             script {
