@@ -118,6 +118,47 @@ fun wrapValue(value: Any): Any {
 
 internal var visualMapCounter = 0
 
+fun defaultPiecewiseVisualMap(aes: Aes, dim: Int, seriesIndex: Int, data: List<Any>,): VisualMap {
+    val categoriesString = data.toSet().map { it.toString() }
+    return VisualMap(
+        /*
+        show = show,
+        text = name?.let { listOf(it) },
+        calculable = calculable,
+
+         */
+        type = "piecewise",
+        //   show = true, // TODO
+        dimension = dim,
+        categories = categoriesString,
+        inRange = createInRange(aes, listOf(), categoriesString.size, false),
+        seriesIndex = seriesIndex,
+
+        right = 10,
+        top = (visualMapCounter++) * 150
+    )
+}
+
+fun defaultContinuousVisualMap(aes: Aes, dim: Int, seriesIndex: Int, data: List<Any>,): VisualMap {
+    return VisualMap(
+        /*
+        show = show,
+        text = name?.let { listOf(it) },
+        calculable = calculable,
+
+         */
+        type = "continuous",
+        //  show = false, // TODO
+        dimension = dim,
+        // todo count
+        inRange = createInRange(aes, listOf(), -1, true),
+        seriesIndex = seriesIndex,
+
+        right = 10,
+        top = (visualMapCounter++) * 150
+    )
+}
+
 // TODO!!! seriesIndex
 fun Scale.toVisualMap(
     aes: Aes,
@@ -134,6 +175,7 @@ fun Scale.toVisualMap(
     val calculable = legend?.calculable
 
      */
+    // todo date!!!
 
     return when (this) {
         is NonPositionalCategoricalScale<*, *> -> {
@@ -191,55 +233,18 @@ fun Scale.toVisualMap(
             )
         }
 
-        is NonPositionalCategoricalDefaultScale -> {
-            // todo date
-
+        is UnspecifiedDefaultScale -> {
             when (domainType) {
-                // todo
-                typeOf<String>() -> {
-                    val categoriesString = data.toSet().map { it.toString() }
-                    VisualMap(
-                        /*
-                        show = show,
-                        text = name?.let { listOf(it) },
-                        calculable = calculable,
-
-                         */
-                        type = "piecewise",
-                        //   show = true, // TODO
-                        dimension = dim,
-                        categories = data.toSet().map { it.toString() },
-                        inRange = createInRange(aes, listOf(), categoriesString.size, false),
-                        seriesIndex = seriesIndex,
-
-                        right = 10,
-                        top = (visualMapCounter++) * 150
-                    )
-                }
-                else -> {
-                    VisualMap(
-                        /*
-                        show = show,
-                        text = name?.let { listOf(it) },
-                        calculable = calculable,
-
-                         */
-                        type = "continuous",
-                        //  show = false, // TODO
-                        dimension = dim,
-                        // todo count
-                        inRange = createInRange(aes, listOf(), -1, true),
-                        seriesIndex = seriesIndex,
-
-                        right = 10,
-                        top = (visualMapCounter++) * 150
-                    )
-                }
+                // todo other, date
+                typeOf<String>() -> defaultPiecewiseVisualMap(aes, dim, seriesIndex, data)
+                else -> defaultContinuousVisualMap(aes, dim, seriesIndex, data)
             }
         }
+        is NonPositionalCategoricalDefaultScale -> defaultPiecewiseVisualMap(aes, dim, seriesIndex, data)
+        is NonPositionalContinuousDefaultScale -> defaultContinuousVisualMap(aes, dim, seriesIndex, data)
 
         else -> {
-            TODO()
+            TODO("error")
         }
     }
 
