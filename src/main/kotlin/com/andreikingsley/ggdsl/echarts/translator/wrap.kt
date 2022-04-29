@@ -249,7 +249,7 @@ internal fun Scale.toVisualMap(
 
 }
 
-internal fun Scale.toAxis(data: List<Any>, domainType: KType? = null): Axis {
+internal fun Scale.toAxis(data: List<Any>, domainType: KType): Axis {
     // todo date
     /*
     val axis = (this as PositionalScale<*>).axis as? EchartsAxis<*>
@@ -290,26 +290,28 @@ internal fun Scale.toAxis(data: List<Any>, domainType: KType? = null): Axis {
             Axis(type = "value")
         }
 
-        is UnspecifiedDefaultScale -> when (domainType) {
-            // todo other types
-            typeOf<String>() -> {
-                Axis(
-                    /*
-                    show = show,
-                    name = name,
+        is UnspecifiedDefaultScale -> {
+            when (domainType) {
+                // todo other types
+                typeOf<String>() -> {
+                    Axis(
+                        /*
+                        show = show,
+                        name = name,
 
-                     */
-                    type = "category",
-                    data = data.toSet().map { it.toString() }
-                )
-            }
-            else -> {
-                Axis(/*
+                         */
+                        type = "category",
+                        data = data.toSet().map { it.toString() }
+                    )
+                }
+                else -> {
+                    Axis(/*
                     show = show,
                     name = name,
                     */
-                    type = "value"
-                )
+                        type = "value"
+                    )
+                }
             }
         }
         else -> {
@@ -419,9 +421,10 @@ fun Plot.toOption(): MetaOption {
                 val srcId = layer.mappings[aes]!!.sourceId()
                 val data = layer.data?.get(srcId) ?: dataset[srcId]!!
                 val seriesIndex = layerToData[index]?.header?.get(srcId) ?: idToDim[srcId]!!
+                val domainType = mapping.domainType
                 when (aes) {
-                    X -> xAxis = scale.toAxis(data)
-                    Y -> yAxis = scale.toAxis(data)
+                    X -> xAxis = scale.toAxis(data, domainType)
+                    Y -> yAxis = scale.toAxis(data, domainType)
                     else -> visualMaps.add(
                         scale.toVisualMap(
                             aes,
