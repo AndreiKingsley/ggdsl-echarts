@@ -31,11 +31,12 @@ internal fun NamedData.wrap(): DataInfo {
 
     val idToDim = header.mapIndexed { index, s -> s to index }.toMap()
 
-    val source = listOf(header) + (
-            (0 until size).map { rowIndex ->
-                header.indices.map { columnIndex -> values.getOrNull(columnIndex)?.getOrNull(rowIndex)!! }
-            }
-            )
+    val source = listOf(header) +
+            ((0 until size).map { rowIndex ->
+                header.indices.map { columnIndex ->
+                    values.getOrNull(columnIndex)?.getOrNull(rowIndex)!!
+                }
+            })
     //source.add(header)
     /*
     for (i in 0 until size) {
@@ -60,6 +61,7 @@ internal fun Geom.toType(): String {
 
 // todo!!!
 internal val colors = listOf("red", "blue", "green", "yellow", "purple", "orange", "pink")
+    .map { Color.fromName(it) }
 internal val sizes = listOf(20.0, 28.0, 36.0, 44.0, 52.0, 60.0, 68.0)
 internal val alphas = listOf(0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5)
 internal val symbols = listOf("circle", "rect", "triangle", "diamond", "roundRect", "pin", "arrow")
@@ -68,25 +70,29 @@ internal val symbols = listOf("circle", "rect", "triangle", "diamond", "roundRec
 internal fun createInRange(aes: Aes, valuesString: List<Any>?, size: Int, isContinuous: Boolean): InRange {
     return when (aes) {
         COLOR -> InRange(
-            color = valuesString?.map { it as String}
+            color = valuesString?.map { it as EchartsColorOption }
                 ?: if (isContinuous) {
-                    listOf("red", "blue")
+                    colors.take(2).map {
+                        it.toEchartsColorOption()
+                    }
                 } else {
-                    colors.take(size)
+                    colors.take(size).map {
+                        it.toEchartsColorOption()
+                    }
                 }
         )
         SIZE -> InRange(
-            symbolSize = valuesString?.map { it as Double }
+            symbolSize = valuesString?.map { (it as Number).toDouble() }
                 ?: if (isContinuous) {
-                    listOf(20.0, 60.0) // todo move constants
+                    listOf(20.0, 60.0) // todo move constants.kt
                 } else {
                     sizes.take(size)
                 }
         )
         ALPHA -> InRange(
-            colorAlpha = valuesString?.map { it as Double  }
+            colorAlpha = valuesString?.map { (it as Number).toDouble() }
                 ?: if (isContinuous) {
-                    listOf(0.3, 0.85) // todo move constants
+                    listOf(0.3, 0.85) // todo move constants.kt
                 } else {
                     alphas.take(size)
                 }
@@ -111,14 +117,16 @@ internal fun wrapValue(value: Any): Any {
         is CommonLineType -> value.description
         is CommonSymbol -> value.description
         is EchartsSymbol -> value.name
-        is StandardColor -> value.description
+        is Color -> wrapColor(value)
         else -> value //.toString()
     }
 }
 
+// todo trash
+
 internal var visualMapCounter = 0
 
-internal fun defaultPiecewiseVisualMap(aes: Aes, dim: Int, seriesIndex: Int, data: List<Any>,): VisualMap {
+internal fun defaultPiecewiseVisualMap(aes: Aes, dim: Int, seriesIndex: Int, data: List<Any>): VisualMap {
     val categoriesString = data.toSet().map { it.toString() }
     return VisualMap(
         /*
@@ -139,7 +147,7 @@ internal fun defaultPiecewiseVisualMap(aes: Aes, dim: Int, seriesIndex: Int, dat
     )
 }
 
-internal fun defaultContinuousVisualMap(aes: Aes, dim: Int, seriesIndex: Int, data: List<Any>,): VisualMap {
+internal fun defaultContinuousVisualMap(aes: Aes, dim: Int, seriesIndex: Int, data: List<Any>): VisualMap {
     return VisualMap(
         /*
         show = show,
@@ -165,7 +173,7 @@ internal fun Scale.toVisualMap(
     dim: Int,
     seriesIndex: Int,
     data: List<Any>,
-    domainType: KType
+    domainType: KType,
 ): VisualMap {
     /*
     val legend = (this as NonPositionalScale<*, *>).legend as? EchartsLegend<*, *>
@@ -178,8 +186,8 @@ internal fun Scale.toVisualMap(
 
     return when (this) {
         is NonPositionalCategoricalScale<*, *> -> {
-            val categoriesString = if (rangeCategories?.isNotEmpty() == true) {
-                rangeCategories!!.map { value -> value.toString() }
+            val categoriesString = if (domainCategories?.isNotEmpty() == true) {
+                domainCategories!!.map { value -> value.toString() }
             } else {
                 data.toSet().map { it.toString() }
             }
@@ -249,7 +257,7 @@ internal fun Scale.toVisualMap(
 
 }
 
-internal fun Scale.toAxis(data: List<Any>, domainType: KType): Axis {
+internal fun Scale.toAxis(/*data: List<Any>,*/ domainType: KType): Axis {
     // todo date
     /*
     val axis = (this as PositionalScale<*>).axis as? EchartsAxis<*>
@@ -267,7 +275,8 @@ internal fun Scale.toAxis(data: List<Any>, domainType: KType): Axis {
 
                  */
                 type = "category", // todo move constant name
-                data = categories?.map { value -> value.toString() } ?: data.toSet().map { it.toString() }
+                // todo need data???
+                data = categories?.map { value -> value.toString() }//data.toSet().map { it.toString() }
             )
         }
         is PositionalContinuousScale<*> -> {
@@ -298,10 +307,9 @@ internal fun Scale.toAxis(data: List<Any>, domainType: KType): Axis {
                         /*
                         show = show,
                         name = name,
-
                          */
                         type = "category",
-                        data = data.toSet().map { it.toString() }
+                        // data = data.toSet().map { it.toString() } // todo need ???
                     )
                 }
                 else -> {
@@ -326,7 +334,7 @@ internal fun <T : Any> Map<Aes, Setting>.getNPSValue(key: NonPositionalAes<T>): 
     return (this[key] as? NonPositionalSetting<*>)?.value as? T
 }
 
-internal fun Layer.toSeries(dataset: List<List<Any>>?): Series {
+internal fun Layer.toSeries(wrappedData: List<List<Any>>?): Series {
 
     // TODO STYLE, type series
 
@@ -348,12 +356,16 @@ internal fun Layer.toSeries(dataset: List<List<Any>>?): Series {
             y = mappings[Y]!!.sourceId()
         ),
         symbolSize = size?.let { it.toInt() * 4 }, // TODO
-        itemStyle = ItemStyle(
-            color = color?.let { wrapColor(it) },
-            opacity = alpha,
-            borderColor = borderColor?.let { wrapColor(it) },
-            borderWidth = borderWidth,
-        ),
+        itemStyle = if (geom != Geom.LINE) {
+            ItemStyle(
+                color = color?.let { wrapColor(it) },
+                opacity = alpha,
+                borderColor = borderColor?.let { wrapColor(it) },
+                borderWidth = borderWidth,
+            )
+        } else {
+            null
+        },
         // TODO
         symbol = symbol?.let { wrapValue(it) as String },
         barWidth = if (geom == Geom.BAR) {
@@ -371,7 +383,7 @@ internal fun Layer.toSeries(dataset: List<List<Any>>?): Series {
             null
         },
         stack = stack,
-        data = dataset?.map { it.map { it.toString() } }
+        data = wrappedData?.map { it.map { it.toString() } }
     )
 }
 
@@ -385,7 +397,7 @@ internal fun Mapping.sourceId(): String {
 // todo better serializer
 internal fun wrapColor(color: Color): EchartsColorOption {
     return when (color) {
-        is StandardColor -> SingleColor(color).toEchartsColorOption()
+        is StandardColor -> color.toEchartsColorOption()
         is LinearGradientColor -> color.toEchartsColorOption()
         is RadialGradientColor -> color.toEchartsColorOption()
         else -> TODO()
@@ -393,6 +405,7 @@ internal fun wrapColor(color: Color): EchartsColorOption {
 }
 
 fun Plot.toOption(): MetaOption {
+    visualMapCounter = 0 // todo
     val (source, idToDim) = dataset.wrap()
     // TODO!!!
 
@@ -423,8 +436,8 @@ fun Plot.toOption(): MetaOption {
                 val seriesIndex = layerToData[index]?.header?.get(srcId) ?: idToDim[srcId]!!
                 val domainType = mapping.domainType
                 when (aes) {
-                    X -> xAxis = scale.toAxis(data, domainType)
-                    Y -> yAxis = scale.toAxis(data, domainType)
+                    X -> xAxis = scale.toAxis(domainType)
+                    Y -> yAxis = scale.toAxis(domainType)
                     else -> visualMaps.add(
                         scale.toVisualMap(
                             aes,

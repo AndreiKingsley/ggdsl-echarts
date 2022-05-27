@@ -49,6 +49,8 @@ fun Option.toJSON(): String {
     return Json {
         explicitNulls = false
         encodeDefaults = true
+        useArrayPolymorphism = true
+        isLenient = true
     }.encodeToString(this)
 
 
@@ -95,6 +97,8 @@ fun Option.toHTML(size: Pair<Int, Int>? = null): String {
 
 
 }
+
+/// TODO!!! UNSAFE!!!
 
 // todo sizes
 @OptIn(ExperimentalSerializationApi::class)

@@ -14,7 +14,7 @@ class AnimationFeature(
 
 val DATA_CHANGE_ANIMATION_FEATURE = FeatureName("DATA_CHANGE_ANIMATION_FEATURE")
 
-class AnimationEasing(val name: String) {
+class AnimationEasing internal constructor(val name: String) {
     companion object {
         val LINEAR = AnimationEasing("linear")
         val CUBIC_OUT = AnimationEasing("cubicOut")

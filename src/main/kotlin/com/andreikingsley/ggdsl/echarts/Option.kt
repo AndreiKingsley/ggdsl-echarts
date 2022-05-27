@@ -64,6 +64,7 @@ data class Series(
     val symbolSize: Int? = null,
     val symbol: String? = null,
     val lineStyle: LineStyle? = null,
+    val showSymbol:Boolean = false, //TODO
     //val stack: String? = null,
     // TODO
     val universalTransition: Boolean = true,
@@ -124,7 +125,7 @@ data class VisualMap(
 data class InRange(
     // TODO
     val symbolSize: List<Double>? = null,
-    val color: List<String>? = null, // todo add gradient???
+    val color: List<EchartsColorOption>? = null, // todo add gradient???
     val colorAlpha: List<Double>? = null,
     val symbol: List<String>? = null,
 )

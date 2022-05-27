@@ -16,7 +16,7 @@ import com.andreikingsley.ggdsl.ir.feature.LayerFeature
  */
 /**/
 
-// todo in others context
+// todo in others context??
 var BarsContext.stack: Stack
 get() = Stack("TODO")
 set(value) {
@@ -24,7 +24,7 @@ set(value) {
 }
 
 //todo
-class Stack internal constructor(val name: String): LayerFeature {
+data class Stack internal constructor(val name: String): LayerFeature {
     override val featureName: FeatureName = STACK_FEATURE_NAME
 }
 

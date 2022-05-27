@@ -1,12 +1,12 @@
 plugins {
     kotlin("jvm") version "1.6.0"
     kotlin("plugin.serialization") version "1.6.0"
-    id("org.jetbrains.kotlin.jupyter.api") version "0.11.0-1"
+    id("org.jetbrains.kotlin.jupyter.api") version "0.11.0-89-1"
     `maven-publish`
 }
 
-val ggdslVersion = "0.6.4"
-val ggdslEChartsVersion = "0.6.4-2"
+val ggdslVersion = "0.6.5"
+val ggdslEChartsVersion = "0.6.5"
 
 group = "com.andreikingsley"
 version = ggdslEChartsVersion
@@ -21,9 +21,11 @@ repositories {
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
     implementation("org.jetbrains.kotlinx:kotlinx-html-jvm:0.7.5")
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.3")
 
     implementation("com.github.AndreiKingsley:ggdsl:$ggdslVersion")
+
+    testImplementation(kotlin("test"))
 
     //todo
    // implementation("com.beust:klaxon:5.5")
