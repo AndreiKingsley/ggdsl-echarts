@@ -3,7 +3,6 @@ package translator
 import com.andreikingsley.ggdsl.dsl.continuousPos
 import com.andreikingsley.ggdsl.dsl.source
 import com.andreikingsley.ggdsl.echarts.*
-import com.andreikingsley.ggdsl.echarts.stack.STACK_FEATURE_NAME
 import com.andreikingsley.ggdsl.echarts.stack.Stack
 import com.andreikingsley.ggdsl.echarts.translator.*
 import com.andreikingsley.ggdsl.echarts.util.color.*
@@ -125,7 +124,7 @@ internal class UnitWrappingsTest {
                     15.0
                 )
             ),
-            mapOf(STACK_FEATURE_NAME to Stack("stack_name"))
+            mapOf(Stack.FEATURE_NAME to Stack("stack_name"))
         )
         val mockData = listOf(
             listOf("Laudate", "omnes", "gentes", "laudate"),

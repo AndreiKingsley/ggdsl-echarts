@@ -9,13 +9,16 @@ class AnimationFeature(
     var easing: AnimationEasing = AnimationEasing.CUBIC_OUT,
     var delay: Int = 0
 ): PlotFeature {
-    override val featureName: FeatureName = DATA_CHANGE_ANIMATION_FEATURE
-}
+    override val featureName: FeatureName = FEATURE_NAME
 
-val DATA_CHANGE_ANIMATION_FEATURE = FeatureName("DATA_CHANGE_ANIMATION_FEATURE")
+    companion object {
+        val FEATURE_NAME = FeatureName("DATA_CHANGE_ANIMATION_FEATURE")
+    }
+}
 
 class AnimationEasing internal constructor(val name: String) {
     companion object {
+        // todo others
         val LINEAR = AnimationEasing("linear")
         val CUBIC_OUT = AnimationEasing("cubicOut")
     }

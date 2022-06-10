@@ -3,19 +3,12 @@ package com.andreikingsley.ggdsl.echarts.animation
 import com.andreikingsley.ggdsl.ir.data.NamedData
 import com.andreikingsley.ggdsl.ir.Plot
 
-data class DataChangeAnimation(
+
+data class DataChangeAnimation internal constructor(
     val plot: Plot,
     val interval: Int,
     val dataChange: NamedData.() -> Unit
 )
-
-/*
-data class PlotChangeAnimation(
-    val plot: Plot,
-    val interval: Int,
-    val plotChange: Plot.() -> Unit
-)
- */
 
 fun Plot.withDataChangeAnimation(
     interval: Int,

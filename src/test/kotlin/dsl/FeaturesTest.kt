@@ -2,7 +2,6 @@ package dsl
 
 import com.andreikingsley.ggdsl.dsl.bars
 import com.andreikingsley.ggdsl.dsl.plot
-import com.andreikingsley.ggdsl.echarts.stack.STACK_FEATURE_NAME
 import com.andreikingsley.ggdsl.echarts.stack.Stack
 import com.andreikingsley.ggdsl.echarts.stack.stack
 import com.andreikingsley.ggdsl.ir.Layer
@@ -12,7 +11,7 @@ import kotlin.test.assertTrue
 internal class FeaturesTest {
 
     private fun Layer.checkStack(expectedStack: Stack?): Boolean {
-        val stack = features[STACK_FEATURE_NAME]
+        val stack = features[Stack.FEATURE_NAME]
         return if(expectedStack == null) {
             stack == null
         } else {

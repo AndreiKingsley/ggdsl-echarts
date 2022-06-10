@@ -35,7 +35,7 @@ object EchartsColorOptionSerializer: KSerializer<EchartsColorOption> {
 }
 
 @kotlinx.serialization.Serializable
-data class GradientOption(
+internal data class GradientOption(
     val type: String,
     val x: Double,
     val y: Double,
@@ -48,7 +48,7 @@ data class GradientOption(
 ): EchartsColorOption()
 
 @kotlinx.serialization.Serializable
-data class ColorStop(
+internal data class ColorStop(
     val offset: Double,
     val color: String,
 )

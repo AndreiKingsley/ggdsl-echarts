@@ -2,8 +2,6 @@ package com.andreikingsley.ggdsl.echarts.translator
 
 import com.andreikingsley.ggdsl.echarts.*
 import com.andreikingsley.ggdsl.echarts.animation.AnimationFeature
-import com.andreikingsley.ggdsl.echarts.animation.DATA_CHANGE_ANIMATION_FEATURE
-import com.andreikingsley.ggdsl.echarts.stack.STACK_FEATURE_NAME
 import com.andreikingsley.ggdsl.echarts.stack.Stack
 import com.andreikingsley.ggdsl.echarts.util.color.*
 import com.andreikingsley.ggdsl.echarts.util.color.toEchartsColorOption
@@ -347,7 +345,7 @@ internal fun Layer.toSeries(wrappedData: List<List<Any>>?): Series {
     val width = settings.getNPSValue(WIDTH)
     val lineType = settings.getNPSValue(LINE_TYPE)
 
-    val stack = (features[STACK_FEATURE_NAME] as? Stack)?.name
+    val stack = (features[Stack.FEATURE_NAME] as? Stack)?.name
 
     return Series(
         type = geom.toType(),
@@ -465,7 +463,7 @@ fun Plot.toOption(): MetaOption {
             series = layers.mapIndexed { index, layer -> layer.toSeries(layerToData[index]?.data) },
             title = layout.title?.let { Title(it) }
         ).apply {
-            (features[DATA_CHANGE_ANIMATION_FEATURE] as? AnimationFeature)?.let {
+            (features[AnimationFeature.FEATURE_NAME] as? AnimationFeature)?.let {
                 animation = true
                 animationThreshold = it.threshold
                 animationDuration = it.duration

@@ -1,12 +1,13 @@
 plugins {
     kotlin("jvm") version "1.6.0"
     kotlin("plugin.serialization") version "1.6.0"
+    id("org.jetbrains.dokka") version "1.6.21"
     id("org.jetbrains.kotlin.jupyter.api") version "0.11.0-89-1"
     `maven-publish`
 }
 
-val ggdslVersion = "0.6.5"
-val ggdslEChartsVersion = "0.6.5"
+val ggdslVersion = "0.6.5-3"
+val ggdslEChartsVersion = "0.6.5-3"
 
 group = "com.andreikingsley"
 version = ggdslEChartsVersion
